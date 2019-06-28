@@ -1,8 +1,8 @@
 {
-  "name": "rom-aid",
+  "name": "rom-archives",
   "version": "1.0.0",
   "description": "ragnarok mobile tool site",
-  "author": "dzulai@gmail.com",
+  "author": "mjjulio@yahoo.com",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
