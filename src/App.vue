@@ -1,12 +1,15 @@
 <template>
   <div id="app">
-    <header class="container-fluid">
-      <div class="container">
-        <router-link v-bind:to="'/'">Home</router-link>
-        <router-link v-bind:to="'/about'">About</router-link>
-        <router-link v-bind:to="'/craft-zeny'">CraftZeny</router-link>
-      </div>
-    </header>
+    <b-navbar toggleable="lg" type="dark" variant="info" fixed="top">
+      <b-navbar-brand href="#">ROM Archives</b-navbar-brand>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav>
+          <b-nav-item v-bind:to="'/'">Home</b-nav-item>
+          <b-nav-item v-bind:to="'/crafting'">HG Crafting</b-nav-item>
+        </b-navbar-nav>  
+      </b-collapse>
+    </b-navbar>
     <router-view></router-view>
   </div>
 </template>
@@ -23,14 +26,12 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  margin-top: 70px;
 }
 
-header {
-  margin: 0 auto;
+nav {
   box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
-  background-color: dodgerblue;
-  height: 50px;
-  margin-bottom: 20px;
+  /* background-color: dodgerblue; */
 }
 header a {
   color:white;

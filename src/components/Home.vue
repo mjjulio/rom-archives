@@ -1,17 +1,18 @@
 <template>
-  <div id="about">
-  When you have a graete story about how your prodcut or service 
+  <div id="home" class="container">
+    <p>site under construction</p>
+    <p>created by dzulai</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'about'
+  name: 'home'
 }
 </script>
 <!-- styling for the component -->
 <style>
-#about {
+#home {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

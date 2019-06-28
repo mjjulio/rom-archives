@@ -2,17 +2,20 @@
   <div id="craft-zeny" class="container">
     <div class="form-group row">
       <div class="col-md-3 col-sm-3 col-xs-6">
-        <label for="usr">Sort By:</label>
+        <label>Name</label>
+				<input type="text" class="form-control" v-model="filters.name">
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-6">
+        <label>Sort By:</label>
         <select class="form-control" v-model="filters.sort">
-          <option v-for="sort of sortOptions" v-bind:value="sort.value" :key="sort">
+          <option v-for="(sort, index) of sortOptions" v-bind:value="sort.value" :key="index">
             {{ sort.name }}
           </option>
         </select>
       </div>
-      <div class="col-md-9 col-sm-9 col-xs-6 flex-align-bottom">
+      <div class="col-md-6 col-sm-6 col-xs-12 flex-align-bottom">
         <span class="text-info italic">
-          * Exchange prices powered by 
-          <a href="https://poporing.life">Poporing Life</a>
+          * Exchange prices powered by <a href="https://poporing.life">Poporing Life</a>
         </span>
       </div>
     </div>
@@ -23,7 +26,15 @@
         <th style="width: 35%">Cost Breakdown</th>
         <th style="width: 30%">Total Cost</th>
       </tr>
-      <tr v-for="headgear in modifiedList" :key="headgear">
+      <tr v-if="loading">
+        <td class="text-center" colspan="3">
+          <div class="loading"><img src="@/assets/loading.gif"></div>
+        </td>
+      </tr>
+      <tr v-if="!loading && !modifiedList.length">
+        <td class="text-center" colspan="3">No results found.</td>
+      </tr>
+      <tr v-for="(headgear, index) in modifiedList" :key="index">
         <td>
           <p><strong>{{ headgear.name }}</strong></p>
           <p>{{ headgear.mainEffect }}</p>
@@ -41,13 +52,13 @@
                 <td>Price</td>
                 <td>Total</td>
               </tr>
-              <tr v-for="material in headgear.materials.normal" :key="material">
+              <tr v-for="(material, index) in headgear.materials.normal" :key="index">
                 <td>{{ material.name }}</td>
                 <td class="text-right">{{ material.quantity }}</td>
                 <td class="text-right">{{ material.price.toLocaleString() }}z</td>
                 <td class="text-right">{{ material.total.toLocaleString() }}z</td>
               </tr>
-              <tr v-for="material in headgear.materials.special" :key="material">
+              <tr v-for="(material, index) in headgear.materials.special" :key="index">
                 <td>{{ material.name }}</td>
                 <td class="text-right">{{ material.quantity }}</td>
                 <td></td>
@@ -85,7 +96,7 @@
             <strong>
             {{ headgear.total.toLocaleString() }}z
             <span v-if="headgear.name !== 'Sakura Bride'">+ {{ headgear.blueprintCost }}</span>
-            <span v-for="material in headgear.materials.special" :key="material">
+            <span v-for="(material, index) in headgear.materials.special" :key="index">
               + {{ material.quantity }} {{ material.name }}
             </span>
             </strong>
@@ -100,7 +111,7 @@
             <p>
               <strong>
                 {{ headgear.total.toLocaleString() }}z
-                <span v-for="material in headgear.materials.special" :key="material">
+                <span v-for="(material, index) in headgear.materials.special" :key="index">
                    + {{ material.quantity }} {{ material.name }}
                 </span>
               </strong>
@@ -118,7 +129,7 @@
               <p><i>-or-</i></p>
               <p>
                 {{ (headgear.total - headgear.bpExchangePrice).toLocaleString() }}z + {{ headgear.blueprintCost }}
-                <span v-for="material in headgear.materials.special" :key="material"> + {{ material }}</span>
+                <span v-for="(material, index) in headgear.materials.special" :key="index"> + {{ material }}</span>
               </p>
             </div>
           </div>
@@ -126,21 +137,21 @@
           <p>
             <span v-bind:class="{ 'highlight' : (filters.sort.indexOf('patk') >= 0) }">
               <span class="text-info">Zeny/ATK Ratio:</span>&nbsp;
-              {{ headgear.atkZenyRatio.toLocaleString() }}
+              {{ headgear.atkZenyRatio.toLocaleString() }}z
               <span class="text-muted">[ATK +{{ headgear.atk }}]</span>
             </span>
           </p>
           <p>
             <span v-bind:class="{ 'highlight' : (filters.sort.indexOf('matk') >= 0) }">
               <span class="text-info">Zeny/MATK Ratio:</span>&nbsp;
-              {{ headgear.matkZenyRatio.toLocaleString() }}
+              {{ headgear.matkZenyRatio.toLocaleString() }}z
               <span class="text-muted">[M.ATK +{{ headgear.matk }}]</span>
             </span>
           </p>
           <p>
             <span v-bind:class="{ 'highlight' : (filters.sort.indexOf('hp') >= 0) }">
               <span class="text-info">Zeny/HP Ratio:</span>&nbsp;
-              {{ headgear.hpZenyRatio.toLocaleString() }}
+              {{ headgear.hpZenyRatio.toLocaleString() }}z
               <span class="text-muted">[Max HP +{{ headgear.maxHP }}]</span>
             </span>
           </p>
@@ -170,6 +181,10 @@
     padding: 0.3rem 0.5rem;
     font-size: 0.75rem;
   }
+  .table th,
+  .table tr {
+    padding: 0.5rem;
+  }
   .flex-align-bottom {
     display: flex;
     justify-content: flex-end;
@@ -178,4 +193,18 @@
 	td > p:last-child {
 		margin-bottom: 0;
 	}
+  .form-control {
+    font-size: 0.875rem;
+  }
+  .form-group label {
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+  .loading {
+    overflow: hidden;
+    height: 30px;
+  }
+  .loading img {
+    margin-top: -135px;
+  }
 </style>

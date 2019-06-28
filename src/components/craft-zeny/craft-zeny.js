@@ -10,6 +10,7 @@ export default {
       noData: [],
       filters: {
         sort: 'default',
+        name: '',
       },
       sortOptions: [
         { name: 'Default', value: 'default' },
@@ -34,6 +35,7 @@ export default {
         { name: 'The turkey goes gobble; gobble; gobble!', bpName: 'turkey_grr_blueprint' },
         { name: 'Unit-05 Helmet', bpName: 'unit.05_helmet_blueprint' },
       ],
+      loading: true,
     };
   },
   created() {
@@ -124,6 +126,7 @@ export default {
             if (headgear.name === 'Sakura Bride') {
               const value = Number(headgear.blueprintCost);
               grandTotal += value;
+              /* eslint-disable no-param-reassign */
               headgear.blueprintCost = `${value.toLocaleString()}z`;
             }
 
@@ -168,13 +171,19 @@ export default {
             });
           }
         });
+        data.loading = false;
       }));
   },
   computed: {
     modifiedList: function modifiedList() {
-      const headgears = this.headgears.slice(0);
+      // const headgears = this.headgears.slice(0);
+      const filters = this.filters;
+      const headgears = this.headgears.filter((headgear) => {
+        const name = headgear.name.toUpperCase();
+        return (filters.name === '' || name.indexOf(filters.name.toUpperCase()) !== -1);
+      });
       let key = '';
-      switch (this.filters.sort) {
+      switch (filters.sort) {
         case 'price-low':
           headgears.sort((a, b) => a.total - b.total);
           break;
