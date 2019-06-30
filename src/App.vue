@@ -6,6 +6,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item v-bind:to="'/'">Home</b-nav-item>
+          <b-nav-item v-bind:to="'/headgear'">Headgear List</b-nav-item>
           <b-nav-item v-bind:to="'/crafting'">HG Crafting</b-nav-item>
         </b-navbar-nav>  
       </b-collapse>

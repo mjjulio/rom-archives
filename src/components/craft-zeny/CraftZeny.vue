@@ -163,7 +163,10 @@
 
 <script src="./craft-zeny.js"></script>
 <!-- styling for the component -->
-<style>
+<style scoped>
+  * {
+    font-size: 0.875rem;
+  }
 	.highlight {
 		font-weight: bold;
     background-color: #FFFF66;
@@ -172,8 +175,13 @@
 	.italic {
 		font-style: italic;
 	}
-  .table {
-    font-size: 14px;
+  .table tr th {
+    text-align: center;
+    vertical-align: middle;
+    position: sticky;
+    top: 57px;
+    color: #fff;
+    background-color: cornflowerblue;
   }
   .table-condensed th, 
   .table-condensed tr,
@@ -193,12 +201,8 @@
 	td > p:last-child {
 		margin-bottom: 0;
 	}
-  .form-control {
-    font-size: 0.875rem;
-  }
   .form-group label {
     font-weight: 700;
-    font-size: 0.875rem;
   }
   .loading {
     overflow: hidden;
