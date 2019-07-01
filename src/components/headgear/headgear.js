@@ -20,6 +20,7 @@ export default {
       },
       types: ['All', 'Head', 'Face', 'Mouth', 'Tail', 'Back', 'Costume'],
       tradeable: ['All', 'Yes', 'No'],
+      loading: true,
       showBackToTop: false,
     };
   },
@@ -52,6 +53,7 @@ export default {
           }
           return headgear;
         });
+        data.loading = false;
       });
   },
   destroyed() {

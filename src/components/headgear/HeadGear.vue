@@ -52,58 +52,69 @@
         </select>
       </div>
 			<div class="col-md-2 col-sm-2 col-xs-6">
-				<label>Reset</label>
+				<label>|</label>
 				<button type="button" class="form-control btn btn-primary" @click="resetFilters()">
-					<i class="glyphicon glyphicon-refresh"></i>
+					Reset
 				</button>
 			</div>
 		</div>
 		<hr>
 			<table class="table table-striped table-bordered ">
 				<tr>
-					<th style="width:120px">Name</th>
-					<th style="width:65px">Type</th>
+					<th style="width:165px">Name</th>
+					<!-- <th style="width:65px">Type</th> -->
 					<th style="width:150px">Main Effect</th>
-					<th style="width:100px">Unlock</th>
-					<th style="width:100px">Deposit</th>
+					<th style="width:110px">Unlock</th>
+					<th style="width:110px">Deposit</th>
 					<th style="width:150px">Blueprint</th>
 					<th style="width:150px">Crafting</th>
 					<th style="width:150px">Headwear<br><span class="small">(Ready-to-Wear)</span></th>
 					<th style="width:150px">Notes</th>
+				</tr>
+				<tr v-if="loading">
+					<td class="text-center" colspan="8">
+						<div class="loading"><img src="@/assets/loading.gif"></div>
+					</td>
+				</tr>
+				<tr v-if="!loading && !filteredHeadgears.length">
+					<td class="text-center" colspan="8">No results found</td>
 				</tr>
 				<!-- <tr v-if="!filteredHeadgears.length">
 					<td colspan="9" class="text-center">No Results Found</td>
 				</tr> -->
 				<tr v-for="(headwear, index) of filteredHeadgears" :key="index">
 					<td class="headgear-name">
-						<strong>{{ headwear.name }}</strong>
+						<p><strong>{{ headwear.name }}</strong></p>
+						<p>
+							<span class="text-info">Type:</span> {{ headwear.type }}
+						</p>
 					</td>
-					<td>{{ headwear.type }}</td>
+					<!-- <td>{{ headwear.type }}</td> -->
 					<td>{{ headwear.mainEffect }}</td>
 					<td>{{ headwear.craftEffect }}</td>
 					<td>{{ headwear.depositEffect }}</td>
 					<td>
 						<div v-if="headwear.blueprintAcquire !== 'None'">
-							<p><strong>Source:</strong><br>{{ headwear.blueprintAcquire }}</p>
-							<p><strong>Cost:</strong> {{ headwear.blueprintCost }}</p>
-							<p><strong>Tradeable:</strong> {{ headwear.blueprintTradeable }}</p>
+							<p><span class="text-info">Source:</span><br>{{ headwear.blueprintAcquire }}</p>
+							<p><span class="text-info">Cost:</span> {{ headwear.blueprintCost }}</p>
+							<p><span class="text-info">Tradeable:</span> {{ headwear.blueprintTradeable }}</p>
 						</div>
 						<div v-else>{{ headwear.blueprintAcquire }}</div>
 					</td>
 					<td>
 						<div v-if="headwear.craftMaterials !== 'N/A'">
-							<p><strong>Materials:</strong><br>{{ headwear.craftMaterials }}</p>
-							<p><strong>Fee:</strong> {{ headwear.craftFee }}</p>
+							<p><span class="text-info">Materials:</span><br>{{ headwear.craftMaterials }}</p>
+							<p><span class="text-info">Fee:</span> {{ headwear.craftFee }}</p>
 						</div>
 						<div v-else>{{ headwear.craftMaterials }}</div>
 					</td>
 					<td>
 						<div v-if="headwear.headgearAcquire !== 'None'">
-							<p><strong>Source:</strong><br>{{ headwear.headgearAcquire }}</p>
-							<p><strong>Cost:</strong> <br v-if="headwear.headgearNpcPrice !== 'N/A'">{{ headwear.headgearNpcPrice }}</p>
+							<p><span class="text-info">Source:</span><br>{{ headwear.headgearAcquire }}</p>
+							<p><span class="text-info">Cost:</span> <br v-if="headwear.headgearNpcPrice !== 'N/A'">{{ headwear.headgearNpcPrice }}</p>
 						</div>
-						<p v-else><strong>Source:</strong> {{ headwear.headgearAcquire }}</p>
-						<p><strong>Tradeable:</strong> {{ headwear.headgearTradeable }}</p>
+						<p v-else><span class="text-info">Source:</span> {{ headwear.headgearAcquire }}</p>
+						<p><span class="text-info">Tradeable:</span> {{ headwear.headgearTradeable }}</p>
 					</td>
 					<td>{{ headwear.notes }}</td>
 				</tr>
@@ -128,11 +139,18 @@
   }
   .table tr,
   .table td {
-    padding: 0.5rem;
+    padding: 0.4rem;
     white-space: pre-line;
     word-break: break-word;
   }
   .form-group label {
     font-weight: 700;
+  }
+  .loading {
+    overflow: hidden;
+    height: 30px;
+  }
+  .loading img {
+    margin-top: -135px;
   }
 </style>

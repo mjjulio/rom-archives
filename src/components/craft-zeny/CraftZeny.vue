@@ -32,7 +32,7 @@
         </td>
       </tr>
       <tr v-if="!loading && !modifiedList.length">
-        <td class="text-center" colspan="3">No results found.</td>
+        <td class="text-center" colspan="3">No results found</td>
       </tr>
       <tr v-for="(headgear, index) in modifiedList" :key="index">
         <td>
