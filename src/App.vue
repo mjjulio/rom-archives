@@ -12,6 +12,7 @@
             <b-dropdown-item v-bind:to="'/headgear'">List</b-dropdown-item>
             <b-dropdown-item v-bind:to="'/crafting'">Crafting</b-dropdown-item>
           </b-nav-item-dropdown>
+          <b-nav-item v-bind:to="'/recipe-list'">Recipe</b-nav-item>
         </b-navbar-nav>  
       </b-collapse>
     </b-navbar>
@@ -35,6 +36,7 @@ export default {
 }
 
 nav {
+  font-family: 'Andika', Helvetica, Arial, sans-serif;
   box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
   /* background-color: dodgerblue; */
 }
