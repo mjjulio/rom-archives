@@ -17,12 +17,13 @@ export default new Router({
       component: Home,
     },
     {
-      path: '/crafting',
+      path: '/headgear-craft',
+      alias: '/crafting',
       name: 'CraftZeny',
       component: CraftZeny,
     },
     {
-      path: '/headgear',
+      path: '/headgear-list',
       name: 'Headgear',
       component: Headgear,
     },
