@@ -124,12 +124,23 @@
                 <span class="text-info">Discharge:</span> {{ food.discharge }}
               </i>
             </p>
-          </td>
-          <td>{{ food.cookLvl10 }}</td>
-          <td>{{ food.tasteLvl10 }}</td>
-        </tr>
-      </table>
-    </div>
+					</td>
+					<td>
+						<b-form-checkbox
+							@change="check($event)"
+							v-model="checkedCookLvl"
+							:value="foods[index].name">{{ food.cookLvl10 }}
+						</b-form-checkbox>
+					</td>
+					<td>
+						<b-form-checkbox
+							v-model="checkedTasteLvl"
+							:value="foods[index].name">{{ food.tasteLvl10 }}
+						</b-form-checkbox>
+					</td>
+				</tr>
+			</table>
+		</div>
   </div>
 </template>
 <script src="./recipe-list.js"></script>
@@ -148,6 +159,7 @@
     color: #fff;
     background-color: cornflowerblue;
     letter-spacing: 0.05rem;
+		z-index: 100;
   }
   .table tr,
   .table td {
@@ -166,4 +178,8 @@
   .loading img {
     margin-top: -135px;
   }
+	.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+		border-color: #28a745;
+    background-color: #28a745;
+	}
 </style>

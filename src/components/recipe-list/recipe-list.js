@@ -16,6 +16,8 @@ export default {
         cookLvl10: '',
         tasteLvl10: '',
       },
+      checkedCookLvl: [],
+      checkedTasteLvl: [],
       stars: ['All', '✩', '★', '★✩', '★★', '★★✩', '★★★', '★★★✩', '★★★★', '★★★★✩', '★★★★★'],
       stations: ['All', 'Luxury Food Station', 'Adventurous BBQ', 'Pressure Cooker', 'Beverage Stall'],
       showBackToTop: false,
@@ -79,5 +81,8 @@ export default {
         data.filters[key] = key === 'star' || key === 'station' ? 'All' : '';
       });
     },
+    check: function check(e) {
+      console.log(e);
+    }
   },
 };

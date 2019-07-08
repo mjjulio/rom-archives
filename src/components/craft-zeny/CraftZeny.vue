@@ -201,8 +201,11 @@
   * {
     font-size: 0.875rem;
   }
-  .highlight {
-    font-weight: bold;
+  p {
+    margin-bottom: 0.25rem;
+  }
+	.highlight {
+		font-weight: bold;
     background-color: #FFFF66;
     /* text-decoration: underline solid red; */
   }
@@ -217,7 +220,10 @@
     color: #fff;
     background-color: cornflowerblue;
   }
-  .table-condensed th,
+  .table-condensed {
+    margin-bottom: 0.25rem;
+  }
+  .table-condensed th, 
   .table-condensed tr,
   .table-condensed td {
     padding: 0.3rem 0.5rem;
@@ -226,6 +232,9 @@
   .table th,
   .table tr {
     padding: 0.5rem;
+  }
+  .table-striped > tr:nth-of-type(2n+1) {
+    background-color: #fcfcfc;
   }
   .flex-align-bottom {
     display: flex;

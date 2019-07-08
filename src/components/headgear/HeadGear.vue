@@ -207,6 +207,9 @@
     white-space: pre-line;
     word-break: break-word;
   }
+  .table-striped > tr:nth-of-type(2n+1) {
+    background-color: #f9f9f9;
+  }
   .form-group label {
     font-weight: 700;
   }
