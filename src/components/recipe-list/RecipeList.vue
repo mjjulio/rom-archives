@@ -2,9 +2,11 @@
   <div
     id="recipe-list"
     class="container">
+		<h3 class="pt-5">Recipe - List</h3>
+    <hr>
     <div
       class="form-group row"
-      style="width: 75%; margin: 0 auto;">
+      style="width: 75%; margin: 0 auto 1rem;">
       <div class="col-md-3 col-sm-3 col-xs-6">
         <label for="usr">Name</label>
         <input
@@ -83,7 +85,6 @@
         </button>
       </div>
     </div>
-    <hr>
     <div>
       <table class="table table-striped table-bordered ">
         <tr class="info">
@@ -134,7 +135,7 @@
 </template>
 <script src="./recipe-list.js"></script>
 <style scoped>
-  * {
+  .table, .form-group {
     font-size: 0.875rem;
   }
   p, .form-control {
@@ -158,12 +159,5 @@
   .form-group label {
     font-weight: 700;
     margin-bottom: 0.25rem;
-  }
-  .loading {
-    overflow: hidden;
-    height: 30px;
-  }
-  .loading img {
-    margin-top: -135px;
   }
 </style>

@@ -2,9 +2,9 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import HelloWorld from '@/components/HelloWorld';
 import CraftZeny from '@/components/craft-zeny/CraftZeny';
-import Headgear from '@/components/headgear/HeadGear';
+import Headgear from '@/components/headgear/HeadGear.vue';
 import RecipeList from '@/components/recipe-list/RecipeList';
-import Enchant from '@/components/enchant/Enchant';
+import Enchant from '@/components/enchant/Enchant.vue';
 import Home from '@/components/Home';
 
 Vue.use(Router);

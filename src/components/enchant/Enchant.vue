@@ -2,7 +2,8 @@
   <div
     id="enchantment"
     class="container">
-    <h2 class="title">4th Enchantment Matrix</h2>
+    <h3 class="pt-5">4th Enchantment Matrix</h3>
+    <hr>
     <div>
       <table
         class="table table-bordered">
@@ -19,6 +20,13 @@
           <th width="8%">Mouth</th>
           <th width="8%">Back</th>
           <th width="8%">Tail</th>
+        </tr>
+        <tr v-if="loading">
+          <td
+            class="text-center"
+            colspan="11">
+            <div class="loading"><img src="@/assets/loading.gif"></div>
+          </td>
         </tr>
         <tr
           v-for="(enchant, index) in fourthEnc"
@@ -40,8 +48,9 @@
         </tr>
       </table>
     </div>
+    <br>
+    <h3 class="pt-5">Enchantment Table per Equipment</h3>
     <hr>
-    <h2 class="title">Enchantment Table per Equipment</h2>
     <div class="form-group row">
       <div class="col-md-3 col-sm-3 col-xs-6">
         <select
@@ -56,7 +65,6 @@
         </select>
       </div>
     </div>
-    <hr>
     <div>
       <table
         class="table table-bordered">
@@ -65,6 +73,13 @@
           <th width="20%">Basic</th>
           <th width="20%">Intermediate</th>
           <th width="20%">Advanced</th>
+        </tr>
+        <tr v-if="loading">
+          <td
+            class="text-center"
+            colspan="4">
+            <div class="loading"><img src="@/assets/loading.gif"></div>
+          </td>
         </tr>
         <tr
           v-for="(enchant, index) in filteredEnchant"
@@ -82,9 +97,6 @@
 </script>
 <!-- styling for the component -->
 <style scoped>
-  .title {
-    padding-top: 50px;
-  }
   .table, .form-group {
     font-size: 0.875rem;
   }

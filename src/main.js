@@ -17,7 +17,7 @@ new Vue({
   router,
   components: { App },
   template: '<App/>',
-});
+}).$mount('#app');
 
 // new Vue({
 //   el: '#app',

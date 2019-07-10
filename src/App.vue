@@ -58,4 +58,11 @@ header a {
 p {
   margin-bottom: 0.5rem;
 }
+.loading {
+  overflow: hidden;
+  height: 30px;
+}
+.loading img {
+  margin-top: -135px;
+}
 </style>

@@ -22,6 +22,7 @@ export default {
       },
       checkClass: 'fas fa-check-circle fa-2x text-success',
       timesClass: 'far fa-times-circle text-danger',
+      loading: true,
     };
   },
   created() {
@@ -51,6 +52,8 @@ export default {
             data.fourthEnc.push(temp);
           }
         });
+
+        data.loading = false;
       });
   },
   computed: {

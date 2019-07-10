@@ -2,6 +2,8 @@
   <div
     id="craft-zeny"
     class="container">
+    <h3 class="pt-5">Headgears - Calculated Crafting Cost</h3>
+    <hr>
     <div class="form-group row">
       <div class="col-md-3 col-sm-3 col-xs-6">
         <label>Name</label>
@@ -29,7 +31,6 @@
         </span>
       </div>
     </div>
-    <hr>
     <table class="table table-striped table-bordered">
       <tr>
         <th style="width: 35%">Headgear</th>
@@ -198,7 +199,7 @@
 <script src="./craft-zeny.js"></script>
 <!-- styling for the component -->
 <style scoped>
-  * {
+  .table, .form-group {
     font-size: 0.875rem;
   }
   .highlight {
@@ -237,12 +238,5 @@
   }
   .form-group label {
     font-weight: 700;
-  }
-  .loading {
-    overflow: hidden;
-    height: 30px;
-  }
-  .loading img {
-    margin-top: -135px;
   }
 </style>
