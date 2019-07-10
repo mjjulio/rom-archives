@@ -1,7 +1,11 @@
 <template>
-  <div id="home" class="container">
+  <div
+    id="home"
+    class="container">
     <div class="text-center">
-      <img class="img-responsive" src="@/assets/ragnarokmobile.jpg">
+      <img
+        class="img-responsive"
+        src="@/assets/ragnarokmobile.jpg">
       <p>created by dzulai</p>
     </div>
   </div>
@@ -9,8 +13,8 @@
 
 <script>
 export default {
-  name: 'home'
-}
+  name: 'Home',
+};
 </script>
 <!-- styling for the component -->
 <style scoped>
@@ -21,7 +25,7 @@ export default {
   color: #2c3e50;
 }
 .img-responsive {
-  max-width: 100%; 
+  max-width: 100%;
   display: block;
   height: auto;
   margin: 0 auto;

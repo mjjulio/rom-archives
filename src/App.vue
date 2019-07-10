@@ -22,6 +22,7 @@
             <b-dropdown-item :to="'/headgear-craft'">Crafting</b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item :to="'/recipe-list'">Recipe</b-nav-item>
+          <b-nav-item :to="'/enchant'">Enchantment</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
