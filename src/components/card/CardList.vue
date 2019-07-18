@@ -15,17 +15,43 @@
       <div
         v-for="(card, index) of filteredCards"
         :key="index"
-        class="col-md-4 col-sm-6 col-xs-12">
+        class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
         <div
-          :style="{ borderColor: card.rarity }"
+          :data-card-color="card.rarity.toLowerCase()"
           class="card mb-3">
           <div class="card-header">{{ card.name }}</div>
           <div class="card-body">
-            <p class="card-text">{{ card.mainEffect }}</p>
-            <p class="card-text">Exchange: {{ card.displayPrice }}</p>
+            <p class="card-text font-size-default">{{ card.mainEffect }}</p>
+            <p class="card-text">
+              <span class="text-info">Deposit:</span>&nbsp;&nbsp;{{ card.depositEffect }}
+            </p>
+            <p class="card-text">
+              <span class="text-info">Unlock:</span>&nbsp;&nbsp;{{ card.unlockEffect }}
+            </p>
+            <p class="card-text">
+              <span class="text-info">Type:</span>&nbsp;&nbsp;{{ card.type }}
+            </p>
+            <p class="card-text">
+              <span class="text-info">Exchange Price:</span>&nbsp;&nbsp;{{ card.displayPrice }}
+            </p>
+            <!-- <b-btn v-bind:v-b-toggle="'collapse' + index" variant="primary"></b-btn> -->
             <p
               v-if="card.materials.length && !card.event"
-              class="card-text">Crafted: {{ card.craftedPrice }}</p>
+              class="card-text">
+              <span class="text-info">Crafted Price:</span>&nbsp;&nbsp;{{ card.craftedPrice }}
+              <b-button
+                v-b-toggle="`collapse-${index}`"
+                class="btn-sm"
+                squared
+                variant="outline-secondary">Materials</b-button>
+              <b-collapse
+                :id="`collapse-${index}`"
+                class="mt-2">
+                <b-card>
+                  <p class="card-text">Collapse contents Here</p>
+                </b-card>
+              </b-collapse>
+            </p>
           </div>
         </div>
       </div>
@@ -62,3 +88,42 @@
   </div>
 </template>
 <script src="./card-list.js"></script>
+<style scoped>
+.font-size-default {
+  font-size: 1rem;
+}
+.card-header {
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+}
+.card-body {
+  padding: 1rem;
+  font-size: 0.875rem;
+  /* white-space: pre-line; */
+  /* word-break: break-word; */
+}
+/* .card[data-card-color='gray'] {
+  border-color: lightgray;
+} */
+.card[data-card-color='gray'] > .card-header {
+  background: lightgray;
+}
+/* .card[data-card-color='blue'] {
+  border-color: deepskyblue;
+} */
+.card[data-card-color='blue'] > .card-header {
+  background: deepskyblue;
+}
+/* .card[data-card-color='green'] {
+  border-color: lightgreen;
+} */
+.card[data-card-color='green'] > .card-header {
+  background: lightgreen;
+}
+/* .card[data-card-color='purple'] {
+  border-color: plum;
+} */
+.card[data-card-color='purple'] > .card-header {
+  background: plum;
+}
+</style>

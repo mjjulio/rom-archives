@@ -51,7 +51,9 @@ export default {
           });
         });
         data.cards = cards.data.map((card) => {
-          const priceData = card.tradeable ? data.exchangePrices.find(price => card.apiName === price.name) : 0;
+          const priceData = card.tradeable
+            ? data.exchangePrices.find(price => card.apiName === price.name)
+            : 0;
           const exchangePrice = priceData ? priceData.price || priceData.lastKnownPrice : 0;
           let dustPrice = 0;
           if (exchangePrice && card.devourable) {
@@ -103,10 +105,11 @@ export default {
           }
           let displayPrice = `${exchangePrice.toLocaleString()}z`;
           if (card.tradeable && !exchangePrice) {
-            displayPrice = 'No Data';
+            displayPrice = 'NO DATA';
           } else if (!card.tradeable) {
             displayPrice = 'N/A';
           }
+          card.mainEffect = '\u2022 '.concat(card.mainEffect.replace(/;/g, '\n\u2022 '));
           return Object.assign({
             exchangePrice,
             displayPrice,
