@@ -21,37 +21,65 @@
           class="card mb-3">
           <div class="card-header">{{ card.name }}</div>
           <div class="card-body">
-            <p class="card-text font-size-default">{{ card.mainEffect }}</p>
+            <ul class="card-text main-effect">
+              <li
+                v-for="(effect, index) of card.mainEffect"
+                :key="index">{{ effect }}</li>
+            </ul>
             <p class="card-text">
               <span class="text-info">Deposit:</span>&nbsp;&nbsp;{{ card.depositEffect }}
             </p>
             <p class="card-text">
               <span class="text-info">Unlock:</span>&nbsp;&nbsp;{{ card.unlockEffect }}
             </p>
-            <p class="card-text">
+            <!-- <p class="card-text">
               <span class="text-info">Type:</span>&nbsp;&nbsp;{{ card.type }}
-            </p>
+            </p> -->
+            <hr>
             <p class="card-text">
               <span class="text-info">Exchange Price:</span>&nbsp;&nbsp;{{ card.displayPrice }}
             </p>
             <!-- <b-btn v-bind:v-b-toggle="'collapse' + index" variant="primary"></b-btn> -->
             <p
-              v-if="card.materials.length && !card.event"
-              class="card-text">
-              <span class="text-info">Crafted Price:</span>&nbsp;&nbsp;{{ card.craftedPrice }}
+              v-if="card.materials.length"
+              class="card-text clearfix">
+              <span v-if="!card.event">
+                <span class="text-info">Crafted Price:</span>&nbsp;&nbsp;{{ card.craftedPrice }}
+              </span>
               <b-button
                 v-b-toggle="`collapse-${index}`"
-                class="btn-sm"
-                squared
-                variant="outline-secondary">Materials</b-button>
-              <b-collapse
-                :id="`collapse-${index}`"
-                class="mt-2">
-                <b-card>
-                  <p class="card-text">Collapse contents Here</p>
-                </b-card>
-              </b-collapse>
+                class="btn-sm material-btn"
+                variant="outline-primary">MATERIALS</b-button>
             </p>
+            <b-collapse
+              v-if="card.materials.length"
+              :id="`collapse-${index}`"
+              class="mt-2">
+              <hr>
+              <p
+                v-for="(mats, index) of card.materials"
+                :key="index"
+                class="card-text">
+                {{ mats.quantity }} x <span class="text-primary">{{ mats.name }}</span>
+                <span v-if="!card.event">= {{ mats.total.toLocaleString() }}z</span>
+              </p>
+              <p class="card-text">Crafting Fee = {{ card.craftFee.toLocaleString() }}z</p>
+              <!-- <b-card>
+                <p class="card-text">Collapse contents Here</p>
+              </b-card> -->
+            </b-collapse>
+          </div>
+          <div class="card-footer">
+            <b-badge variant="info">{{ card.type }}</b-badge>
+             <b-badge
+              v-if="card.materials.length"
+              variant="success">Haute Couture</b-badge>
+            <b-badge
+              v-if="!card.devourable"
+              variant="secondary">Cannot Decompose</b-badge>
+            <b-badge
+              v-if="card.event"
+              variant="warning">Event</b-badge>
           </div>
         </div>
       </div>
@@ -89,8 +117,16 @@
 </template>
 <script src="./card-list.js"></script>
 <style scoped>
-.font-size-default {
+.card-body, .card-header {
+  font-family: 'Andika', Helvetica, Arial, sans-serif;
+}
+p {
+  margin-bottom: 0.25rem;
+}
+.card-body ul.main-effect {
   font-size: 1rem;
+  padding-inline-start: 1rem;
+  margin-block-end: 0.5rem;
 }
 .card-header {
   padding: 0.75rem 1rem;
@@ -102,28 +138,33 @@
   /* white-space: pre-line; */
   /* word-break: break-word; */
 }
+.material-btn {
+  font-size: 0.625rem;
+  letter-spacing: 0.05rem;
+  float: right;
+}
 /* .card[data-card-color='gray'] {
   border-color: lightgray;
 } */
-.card[data-card-color='gray'] > .card-header {
-  background: lightgray;
+.card[data-card-color='white'] > .card-header {
+  background: linear-gradient(45deg, white, lightgray) ;
 }
 /* .card[data-card-color='blue'] {
   border-color: deepskyblue;
 } */
 .card[data-card-color='blue'] > .card-header {
-  background: deepskyblue;
+  background: linear-gradient(45deg, deepskyblue, lightgray);
 }
 /* .card[data-card-color='green'] {
   border-color: lightgreen;
 } */
 .card[data-card-color='green'] > .card-header {
-  background: lightgreen;
+  background: linear-gradient(45deg, lightgreen, lightgray) ;
 }
 /* .card[data-card-color='purple'] {
   border-color: plum;
 } */
 .card[data-card-color='purple'] > .card-header {
-  background: plum;
+  background: linear-gradient(45deg, orchid, lightgray) ;
 }
 </style>

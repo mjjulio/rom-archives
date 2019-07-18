@@ -107,9 +107,9 @@ export default {
           if (card.tradeable && !exchangePrice) {
             displayPrice = 'NO DATA';
           } else if (!card.tradeable) {
-            displayPrice = 'N/A';
+            displayPrice = 'non-tradeable';
           }
-          card.mainEffect = '\u2022 '.concat(card.mainEffect.replace(/;/g, '\n\u2022 '));
+          card.mainEffect = card.mainEffect.split('; ');
           return Object.assign({
             exchangePrice,
             displayPrice,
@@ -119,28 +119,35 @@ export default {
         data.cards.forEach((card) => {
           const materials = [];
           let craftedPrice = 0;
-          if (card.materials && !card.event) {
+          if (card.materials) {
             card.materials.split('; ').forEach((mat) => {
               const quantity = Number(mat.substr(0, mat.indexOf(' ')));
               const name = mat.substr(mat.indexOf(' ') + 1);
-              let price = 0;
-              if (name.toLowerCase() === 'gram dust') {
-                price = data.dust.all.price;
-              } else if (name.toLowerCase() === 'mandragora flower card') {
-                const found = data.exchangePrices.find(ex => ex.displayName === 'mandragora flower card');
-                price = found ? found.price || found.lastKnownPrice : 0;
+              if (card.event) {
+                materials.push({
+                  name,
+                  quantity,
+                });
               } else {
-                const found = data.exchangePrices.find(ex => ex.displayName === name.toLowerCase());
-                price = found ? found.price || found.lastKnownPrice : 0;
+                let price = 0;
+                if (name.toLowerCase() === 'gram dust') {
+                  price = data.dust.all.price;
+                } else if (name.toLowerCase() === 'mandragora flower card') {
+                  const found = data.exchangePrices.find(ex => ex.displayName === 'mandragora card');
+                  price = found ? found.price || found.lastKnownPrice : 0;
+                } else {
+                  const found = data.exchangePrices.find(ex => ex.displayName === name.toLowerCase());
+                  price = found ? found.price || found.lastKnownPrice : 0;
+                }
+                const total = quantity * price;
+                craftedPrice += total;
+                materials.push({
+                  name,
+                  quantity,
+                  price,
+                  total,
+                });
               }
-              const total = quantity * price;
-              craftedPrice += total;
-              materials.push({
-                name,
-                quantity,
-                price,
-                total,
-              });
             });
           }
           card.materials = materials;
