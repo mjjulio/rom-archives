@@ -5,6 +5,7 @@ import CraftZeny from '@/components/craft-zeny/CraftZeny';
 import Headgear from '@/components/headgear/HeadGear.vue';
 import RecipeList from '@/components/recipe-list/RecipeList';
 import Enchant from '@/components/enchant/Enchant.vue';
+import CardList from '@/components/card/CardList.vue';
 import Home from '@/components/Home';
 
 Vue.use(Router);
@@ -42,6 +43,11 @@ export default new Router({
       path: '/enchant',
       name: 'Enchant',
       component: Enchant,
+    },
+    {
+      path: '/card-list',
+      name: 'CardList',
+      component: CardList,
     },
   ],
 });
