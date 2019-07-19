@@ -11,7 +11,7 @@ export default {
           name: '',
           price: 0,
         },
-        gray: {
+        white: {
           name: '',
           price: 0,
         },
@@ -57,44 +57,27 @@ export default {
           const exchangePrice = priceData ? priceData.price || priceData.lastKnownPrice : 0;
           let dustPrice = 0;
           if (exchangePrice && card.devourable) {
-            switch (card.rarity) {
-              case 'Gray':
+            const color = card.rarity.toLowerCase();
+            switch (color) {
+              case 'white':
                 dustPrice = exchangePrice / 10;
-                if (!data.dust.gray.name || dustPrice < data.dust.gray.price) {
-                  data.dust.gray = {
-                    name: card.name,
-                    price: dustPrice,
-                  };
-                }
                 break;
-              case 'Green':
+              case 'green':
                 dustPrice = exchangePrice / 20;
-                if (!data.dust.green.name || dustPrice < data.dust.green.price) {
-                  data.dust.green = {
-                    name: card.name,
-                    price: dustPrice,
-                  };
-                }
                 break;
-              case 'Blue':
+              case 'blue':
                 dustPrice = exchangePrice / 50;
-                if (!data.dust.blue.name || dustPrice < data.dust.blue.price) {
-                  data.dust.blue = {
-                    name: card.name,
-                    price: dustPrice,
-                  };
-                }
                 break;
-              case 'Purple':
+              case 'purple':
                 dustPrice = exchangePrice / 100;
-                if (!data.dust.purple.name || dustPrice < data.dust.purple.price) {
-                  data.dust.purple = {
-                    name: card.name,
-                    price: dustPrice,
-                  };
-                }
                 break;
               default:
+            }
+            if (!data.dust[color].name || dustPrice < data.dust[color].price) {
+              data.dust[color] = {
+                name: card.name,
+                price: dustPrice,
+              };
             }
             if (!data.dust.all.name || dustPrice < data.dust.all.price) {
               data.dust.all = {
@@ -110,6 +93,7 @@ export default {
             displayPrice = 'non-tradeable';
           }
           card.mainEffect = card.mainEffect.split('; ');
+          card.tags = card.tags ? card.tags.split('; ') : [];
           return Object.assign({
             exchangePrice,
             displayPrice,
@@ -136,7 +120,8 @@ export default {
                   const found = data.exchangePrices.find(ex => ex.displayName === 'mandragora card');
                   price = found ? found.price || found.lastKnownPrice : 0;
                 } else {
-                  const found = data.exchangePrices.find(ex => ex.displayName === name.toLowerCase());
+                  const found = data.exchangePrices
+                    .find(ex => ex.displayName === name.toLowerCase());
                   price = found ? found.price || found.lastKnownPrice : 0;
                 }
                 const total = quantity * price;
