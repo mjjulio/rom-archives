@@ -15,19 +15,19 @@
         </p>
         <p>Cheapest card per color are:</p>
         <ul class="row">
-          <li class="col-xs-12 col-sm-12 col-md-6 col-lg-4 p-0">
+          <li class="col-12 col-sm-12 col-md-6 col-lg-4 p-0">
             <span class="text-secondary">[white] {{ dust.white.name }}:</span>
             {{ dust.white.price.toLocaleString() }}z per gram dust
           </li>
-          <li class="col-xs-12 col-sm-12 col-md-6 col-lg-8 p-0">
+          <li class="col-12 col-sm-12 col-md-6 col-lg-8 p-0">
             <span class="text-success">[green] {{ dust.green.name }}:</span>
             {{ dust.green.price.toLocaleString() }}z per gram dust
           </li>
-          <li class="col-xs-12 col-sm-12 col-md-6 col-lg-4 p-0">
+          <li class="col-12 col-sm-12 col-md-6 col-lg-4 p-0">
             <span class="text-primary">[blue] {{ dust.blue.name }}:</span>
             {{ dust.blue.price.toLocaleString() }}z per gram dust
           </li>
-          <li class="col-xs-12 col-sm-12 col-md-6 col-lg-8 p-0">
+          <li class="col-12 col-sm-12 col-md-6 col-lg-8 p-0">
             <span class="text-purple">[purple] {{ dust.purple.name }}:</span>
             {{ dust.purple.price.toLocaleString() }}z per gram dust
           </li>
@@ -37,7 +37,7 @@
     <br> -->
     <div class="row">
       <div class="col-md-12">
-        Gram Dust Price: {{ dust.all.price.toLocaleString() }}z
+        <h5>Gram Dust Price: {{ dust.all.price.toLocaleString() }}z</h5>
       </div>
       <div class="col-md-12 small">
         <p>
@@ -46,30 +46,100 @@
         </p>
         <p>Cheapest card per color are:</p>
         <ul class="row">
-          <li class="col-xs-12 col-sm-12 col-md-6 col-lg-4 p-0">
+          <li class="col-12 col-sm-12 col-md-6 col-lg-4 p-0">
             <span class="text-secondary">[white] {{ dust.white.name }}:</span>
             {{ dust.white.price.toLocaleString() }}z per gram dust
           </li>
-          <li class="col-xs-12 col-sm-12 col-md-6 col-lg-8 p-0">
+          <li class="col-12 col-sm-12 col-md-6 col-lg-8 p-0">
             <span class="text-success">[green] {{ dust.green.name }}:</span>
             {{ dust.green.price.toLocaleString() }}z per gram dust
           </li>
-          <li class="col-xs-12 col-sm-12 col-md-6 col-lg-4 p-0">
+          <li class="col-12 col-sm-12 col-md-6 col-lg-4 p-0">
             <span class="text-primary">[blue] {{ dust.blue.name }}:</span>
             {{ dust.blue.price.toLocaleString() }}z per gram dust
           </li>
-          <li class="col-xs-12 col-sm-12 col-md-6 col-lg-8 p-0">
+          <li class="col-12 col-sm-12 col-md-6 col-lg-8 p-0">
             <span class="text-purple">[purple] {{ dust.purple.name }}:</span>
             {{ dust.purple.price.toLocaleString() }}z per gram dust
           </li>
         </ul>
       </div>
     </div>
+    <div class="row form-group">
+      <div class="col-6 col-md-4 col-lg-3 mb-1">
+        <label class="font-weight-bold mb-1">Name</label>
+        <input
+          v-model="filters.name"
+          class="form-control form-control-sm">
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 mb-1">
+        <label class="font-weight-bold mb-1">Main Effect</label>
+        <input
+          v-model="filters.mainEffect"
+          class="form-control form-control-sm">
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 mb-1">
+        <label class="font-weight-bold mb-1">Deposit Effect</label>
+        <input
+          v-model="filters.depositEffect"
+          class="form-control form-control-sm">
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 mb-1">
+        <label class="font-weight-bold mb-1">Unlock Effect</label>
+        <input
+          v-model="filters.unlockEffect"
+          class="form-control form-control-sm">
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 mb-1">
+        <label class="font-weight-bold mb-1">Type</label>
+        <select
+          v-model="filters.type"
+          class="form-control form-control-sm">
+          <option
+            v-for="(type, index) of types"
+            :value="type"
+            :key="index">{{ type }}</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 mb-1">
+        <label class="font-weight-bold mb-1">Color</label>
+        <select
+          v-model="filters.color"
+          class="form-control form-control-sm">
+          <option
+            v-for="(color, index) of colors"
+            :value="color"
+            :key="index">{{ color }}</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 mb-1">
+        <label class="font-weight-bold mb-1">Tag</label>
+        <select
+          v-model="filters.tag"
+          class="form-control form-control-sm">
+          <option
+            v-for="(tag, index) of tags"
+            :value="tag"
+            :key="index">{{ tag }}</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 mb-1">
+        <label class="font-weight-bold mb-1">Sort</label>
+        <select
+          v-model="filters.sort"
+          class="form-control form-control-sm">
+          <option
+            v-for="(sort, index) of sorting"
+            :value="sort.value"
+            :key="index">{{ sort.name }}</option>
+        </select>
+      </div>
+    </div>
     <div class="row">
       <div
         v-for="(card, index) of filteredCards"
         :key="index"
-        class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+        class="col-lg-4 col-md-6 col-sm-12 col-12">
         <div
           :data-card-color="card.rarity.toLowerCase()"
           class="card mb-3">
@@ -120,22 +190,33 @@
             </b-collapse>
           </div>
           <div class="card-footer">
-            <b-badge variant="info">{{ card.type }}</b-badge>
+            <b-badge
+              variant="info"
+              href="#"
+              @click="clickTag('type', card.type)">{{ card.type }}</b-badge>
             <b-badge
               v-if="card.materials.length"
-              variant="success">Haute Couture</b-badge>
+              variant="success"
+              href="#"
+              @click="clickTag('tag', 'Haute Couture')">Haute Couture</b-badge>
             <template v-for="(tag, index) of card.tags">
               <b-badge
                 :key="tag + index"
-                :data-card-tag="tag.toLowerCase()">{{ tag }}</b-badge>
+                :data-card-tag="tag.toLowerCase()"
+                href="#"
+                @click="clickTag('tag', tag)">{{ tag }}</b-badge>
               <span :key="index" />
             </template>
             <b-badge
               v-if="!card.devourable"
-              variant="secondary">Cannot Decompose</b-badge>
+              variant="secondary"
+              href="#"
+              @click="clickTag('tag', 'Cannot Decompose')">Cannot Decompose</b-badge>
             <b-badge
               v-if="card.event"
-              variant="warning">Event</b-badge>
+              variant="warning"
+              href="#"
+              @click="clickTag('tag', 'Event')">Event</b-badge>
           </div>
         </div>
       </div>
@@ -144,6 +225,9 @@
 </template>
 <script src="./card-list.js"></script>
 <style scoped>
+.form-group {
+  font-size: 0.875rem;
+}
 .font-size-reset {
   font-size: 1rem;
 }

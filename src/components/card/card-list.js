@@ -7,27 +7,32 @@ export default {
       cards: [],
       exchangePrices: [],
       dust: {
-        all: {
-          name: '',
-          price: 0,
-        },
-        white: {
-          name: '',
-          price: 0,
-        },
-        green: {
-          name: '',
-          price: 0,
-        },
-        blue: {
-          name: '',
-          price: 0,
-        },
-        purple: {
-          name: '',
-          price: 0,
-        },
+        all: { name: '', price: 0 },
+        white: { name: '', price: 0 },
+        green: { name: '', price: 0 },
+        blue: { name: '', price: 0 },
+        purple: { name: '', price: 0 },
       },
+      filters: {
+        name: '',
+        mainEffect: '',
+        depositEffect: '',
+        unlockEffect: '',
+        type: '—',
+        color: '—',
+        tag: '—',
+        sort: 'default',
+      },
+      colors: ['—', 'White', 'Green', 'Blue', 'Purple'],
+      types: ['—', 'Weapon', 'Off-hand', 'Headwear', 'Armor', 'Garment', 'Footgear', 'Accessory'],
+      tags: ['—', 'Haute Couture', 'Element', 'Race', 'Size', 'Skill', 'Status Effect', 'Event', 'Cannot Decompose'],
+      sorting: [
+        { name: '—', value: 'default' },
+        { name: 'Name (A-Z)', value: 'name-az' },
+        { name: 'Name (Z-A)', value: 'name-za' },
+        { name: 'Exchange Price (Low)', value: 'eprice-low' },
+        { name: 'Exchange Price (High)', value: 'eprice-high' },
+      ],
       loading: true,
     };
   },
@@ -143,7 +148,88 @@ export default {
   },
   computed: {
     filteredCards: function filteredCards() {
-      return this.cards;
+      const name = this.filters.name.toLowerCase();
+      const mainEffect = this.filters.mainEffect.toLowerCase();
+      const depositEffect = this.filters.depositEffect.toLowerCase();
+      const unlockEffect = this.filters.unlockEffect.toLowerCase();
+      const tag = this.filters.tag;
+      const cards = this.cards.filter((card) => {
+        const cme = card.mainEffect.join(';').toLowerCase();
+        let filterMainEffect = cme.indexOf(mainEffect) !== -1;
+        if (mainEffect === 'atk' && filterMainEffect) {
+          filterMainEffect = (cme.indexOf('m.atk') + 2) !== cme.indexOf('atk');
+        }
+
+        const cde = card.depositEffect.toLowerCase();
+        let filterDepositEffect = cde.indexOf(depositEffect) !== -1;
+        if (depositEffect === 'atk' && filterDepositEffect) {
+          filterDepositEffect = (cde.indexOf('m.atk') + 2) !== cde.indexOf('atk');
+        }
+
+        const cue = card.unlockEffect.toLowerCase();
+        let filterUnlockEffect = cue.indexOf(unlockEffect) !== -1;
+        if (unlockEffect === 'atk' && filterUnlockEffect) {
+          filterUnlockEffect = (cue.indexOf('m.atk') + 2) !== cde.indexOf('atk');
+        }
+
+        let filterTag = true;
+        if (tag === 'Haute Couture') {
+          filterTag = !!card.materials.length;
+        } else if (tag === 'Event') {
+          filterTag = !!card.event;
+        } else if (tag === 'Cannot Decompose') {
+          filterTag = !!card.devourable;
+        } else {
+          filterTag = card.tags.join(',').indexOf(tag) !== -1;
+        }
+
+        return (name === '' || card.name.toLowerCase().indexOf(name) !== -1)
+          && (mainEffect === '' || filterMainEffect)
+          && (depositEffect === '' || filterDepositEffect)
+          && (unlockEffect === '' || filterUnlockEffect)
+          && (this.filters.type === '—' || this.filters.type === card.type)
+          && (this.filters.color === '—' || this.filters.color === card.rarity)
+          && (this.filters.tag === '—' || filterTag)
+        ;
+      });
+
+      let key = '';
+      switch (this.filters.sort) {
+        case 'name-az':
+          cards.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case 'name-za':
+          cards.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        case 'eprice-low':
+          cards.sort((a, b) => a.exchangePrice - b.exchangePrice);
+          key = 'exchangePrice';
+          break;
+        case 'eprice-high':
+          cards.sort((a, b) => b.exchangePrice - a.exchangePrice);
+          key = 'exchangePrice';
+          break;
+        default:
+      }
+      if (key) {
+        const excluded = [];
+        const sorted = [];
+        cards.forEach((card) => {
+          if (!card[key]) {
+            excluded.push(card);
+          } else {
+            sorted.push(card);
+          }
+        });
+        return sorted.concat(excluded);
+      }
+
+      return cards;
+    },
+  },
+  methods: {
+    clickTag: function clickTag(filter, value) {
+      this.filters[filter] = value;
     },
   },
 };
