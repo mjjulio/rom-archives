@@ -143,8 +143,8 @@ export default {
           card.materials = materials;
           card.craftedPrice = `${(craftedPrice + card.craftFee).toLocaleString()}z`;
         });
+        data.loading = false;
       }));
-    data.loading = false;
   },
   computed: {
     filteredCards: function filteredCards() {
@@ -178,7 +178,7 @@ export default {
         } else if (tag === 'Event') {
           filterTag = !!card.event;
         } else if (tag === 'Cannot Decompose') {
-          filterTag = !!card.devourable;
+          filterTag = !card.devourable;
         } else {
           filterTag = card.tags.join(',').indexOf(tag) !== -1;
         }
