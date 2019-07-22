@@ -47,11 +47,11 @@
           <span v-else>{{ dust.all.price.toLocaleString() }}z</span>
         </h5>
       </div>
-      <div class="col-md-12 small">
+      <div class="col-md-12">
         <p>
           <em>Gram dust price is determined by calculating how much each gram dust would cost
           after decomposing a card with King Poring.<br>
-          Cheapest card per color are:</em>
+          Cheapest gram dust by card color are:</em>
         </p>
         <!-- <p><em>Cheapest card per color are:</em></p> -->
         <ul class="row">
@@ -66,7 +66,8 @@
             </span>
             <span v-else>
               {{ dust.white.price.toLocaleString() }}z
-              <em>per gram dust</em></span>
+              <!-- <em>per gram dust</em> -->
+              </span>
           </li>
           <li class="col-12 col-sm-12 col-md-6 col-lg-8 p-0">
             <span class="text-success">[green] {{ dust.green.name }}:</span>
@@ -76,7 +77,8 @@
                 class="text-success dust-spinner"></b-spinner>
             </span>
             <span v-else>{{ dust.green.price.toLocaleString() }}z 
-              <em>per gram dust</em></span>
+              <!-- <em>per gram dust</em> -->
+              </span>
           </li>
           <li class="col-12 col-sm-12 col-md-6 col-lg-4 p-0">
             <span class="text-primary">[blue] {{ dust.blue.name }}:</span>
@@ -86,9 +88,10 @@
                 class="text-primary dust-spinner"></b-spinner>
             </span>
             <span v-else>{{ dust.blue.price.toLocaleString() }}z
-              <em>per gram dust</em></span>
+              <!-- <em>per gram dust</em> -->
+              </span>
           </li>
-          <li class="col-12 col-sm-12 col-md-6 col-lg-8 p-0">
+          <li class="col-12 col-sm-12 col-md-6 col-lg-4 p-0">
             <span class="text-purple">[purple] {{ dust.purple.name }}:</span>
             <span v-if="loading">
               <b-spinner 
@@ -96,8 +99,14 @@
                 class="text-purple dust-spinner"></b-spinner>
             </span>
             <span v-else>{{ dust.purple.price.toLocaleString() }}z
-              <em>per gram dust</em></span>
+              <!-- <em>per gram dust</em> -->
+            </span>
           </li>
+          <div class="col-12 col-sm-12 col-md-12 col-lg-4 p-0 text-right">
+            <em class="text-info small">
+              * Exchange prices powered by <a href="https://poporing.life">Poporing Life</a>
+            </em>
+          </div>
         </ul>
       </div>
     </div>
@@ -106,30 +115,35 @@
         <label class="font-weight-bold mb-1">Name</label>
         <input
           v-model="filters.name"
+          :class="{ 'bg-warning' : filters.name }"
           class="form-control form-control-sm">
       </div>
       <div class="col-6 col-md-4 col-lg-3 mb-1">
         <label class="font-weight-bold mb-1">Main Effect</label>
         <input
           v-model="filters.mainEffect"
+          :class="{ 'bg-warning' : filters.mainEffect }"
           class="form-control form-control-sm">
       </div>
       <div class="col-6 col-md-4 col-lg-3 mb-1">
         <label class="font-weight-bold mb-1">Deposit Effect</label>
         <input
           v-model="filters.depositEffect"
+          :class="{ 'bg-warning' : filters.depositEffect }"
           class="form-control form-control-sm">
       </div>
       <div class="col-6 col-md-4 col-lg-3 mb-1">
         <label class="font-weight-bold mb-1">Unlock Effect</label>
         <input
           v-model="filters.unlockEffect"
+          :class="{ 'bg-warning' : filters.unlockEffect }"
           class="form-control form-control-sm">
       </div>
       <div class="col-6 col-md-4 col-lg-3 mb-1">
         <label class="font-weight-bold mb-1">Type</label>
         <select
           v-model="filters.type"
+          :class="{ 'bg-warning' : filters.type !== '—' }"
           class="form-control form-control-sm">
           <option
             v-for="(type, index) of types"
@@ -141,6 +155,7 @@
         <label class="font-weight-bold mb-1">Color</label>
         <select
           v-model="filters.color"
+          :class="{ 'bg-warning' : filters.color !== '—' }"
           class="form-control form-control-sm">
           <option
             v-for="(color, index) of colors"
@@ -152,6 +167,7 @@
         <label class="font-weight-bold mb-1">Tag</label>
         <select
           v-model="filters.tag"
+          :class="{ 'bg-warning' : filters.tag !== '—' }"
           class="form-control form-control-sm">
           <option
             v-for="(tag, index) of tags"
@@ -163,6 +179,7 @@
         <label class="font-weight-bold mb-1">Sort</label>
         <select
           v-model="filters.sort"
+          :class="{ 'bg-warning' : filters.sort !== 'default' }"
           class="form-control form-control-sm">
           <option
             v-for="(sort, index) of sorting"
@@ -279,7 +296,7 @@
   font-size: 1rem;
 }
 .text-purple {
-  color: purple;
+  color: darkorchid;
 }
 .card-body, .card-header {
   font-family: 'Andika', Helvetica, Arial, sans-serif;
