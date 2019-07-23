@@ -4,45 +4,14 @@
     class="container">
     <h3 class="pt-5">Cards - List</h3>
     <hr>
-    <!-- <div
-      class="card card-inverse"
-      style="background: #f0f0f0">
-      <div class="card-body">
-        <p class="font-size-reset">Gram Dust Price: {{ dust.all.price.toLocaleString() }}z</p>
-        <p>
-          Gram dust price is determined by calculating how much each gram dust would cost
-          after decomposing a card with King Poring.
-        </p>
-        <p>Cheapest card per color are:</p>
-        <ul class="row">
-          <li class="col-12 col-sm-12 col-md-6 col-lg-4 p-0">
-            <span class="text-secondary">[white] {{ dust.white.name }}:</span>
-            {{ dust.white.price.toLocaleString() }}z per gram dust
-          </li>
-          <li class="col-12 col-sm-12 col-md-6 col-lg-8 p-0">
-            <span class="text-success">[green] {{ dust.green.name }}:</span>
-            {{ dust.green.price.toLocaleString() }}z per gram dust
-          </li>
-          <li class="col-12 col-sm-12 col-md-6 col-lg-4 p-0">
-            <span class="text-primary">[blue] {{ dust.blue.name }}:</span>
-            {{ dust.blue.price.toLocaleString() }}z per gram dust
-          </li>
-          <li class="col-12 col-sm-12 col-md-6 col-lg-8 p-0">
-            <span class="text-purple">[purple] {{ dust.purple.name }}:</span>
-            {{ dust.purple.price.toLocaleString() }}z per gram dust
-          </li>
-        </ul>
-      </div>
-    </div>
-    <br> -->
     <div class="row">
       <div class="col-md-12">
         <h5>
           <span class="text-info">Gram Dust Price:</span>
           <span v-if="loading">
-            <b-spinner 
+            <b-spinner
               label="loading..."
-              class="dust-spinner"></b-spinner>
+              class="dust-spinner" />
           </span>
           <span v-else>{{ dust.all.price.toLocaleString() }}z</span>
         </h5>
@@ -51,60 +20,53 @@
         <p>
           <em>Gram dust price is determined by calculating how much each gram dust would cost
           after decomposing a card with King Poring.<br>
-          Cheapest gram dust by card color are:</em>
+            Cheapest gram dust by card color are:</em>
         </p>
-        <!-- <p><em>Cheapest card per color are:</em></p> -->
         <ul class="row">
           <li class="col-12 col-sm-12 col-md-6 col-lg-4 p-0">
             <span class="text-secondary">[white]
               {{ dust.white.name }}:
             </span>
             <span v-if="loading">
-              <b-spinner 
+              <b-spinner
                 label="loading..."
-                class="text-secondary dust-spinner"></b-spinner>
+                class="text-secondary dust-spinner" />
             </span>
-            <span v-else>
-              {{ dust.white.price.toLocaleString() }}z
-              <!-- <em>per gram dust</em> -->
-              </span>
+            <span v-else>{{ dust.white.price.toLocaleString() }}z</span>
           </li>
           <li class="col-12 col-sm-12 col-md-6 col-lg-8 p-0">
             <span class="text-success">[green] {{ dust.green.name }}:</span>
             <span v-if="loading">
-              <b-spinner 
+              <b-spinner
                 label="loading..."
-                class="text-success dust-spinner"></b-spinner>
+                class="text-success dust-spinner" />
             </span>
-            <span v-else>{{ dust.green.price.toLocaleString() }}z 
-              <!-- <em>per gram dust</em> -->
-              </span>
+            <span v-else>{{ dust.green.price.toLocaleString() }}z</span>
           </li>
           <li class="col-12 col-sm-12 col-md-6 col-lg-4 p-0">
             <span class="text-primary">[blue] {{ dust.blue.name }}:</span>
             <span v-if="loading">
-              <b-spinner 
+              <b-spinner
                 label="loading..."
-                class="text-primary dust-spinner"></b-spinner>
+                class="text-primary dust-spinner" />
             </span>
-            <span v-else>{{ dust.blue.price.toLocaleString() }}z
-              <!-- <em>per gram dust</em> -->
-              </span>
+            <span v-else>{{ dust.blue.price.toLocaleString() }}z</span>
           </li>
           <li class="col-12 col-sm-12 col-md-6 col-lg-4 p-0">
             <span class="text-purple">[purple] {{ dust.purple.name }}:</span>
             <span v-if="loading">
-              <b-spinner 
+              <b-spinner
                 label="loading..."
-                class="text-purple dust-spinner"></b-spinner>
+                class="text-purple dust-spinner" />
             </span>
-            <span v-else>{{ dust.purple.price.toLocaleString() }}z
-              <!-- <em>per gram dust</em> -->
-            </span>
+            <span v-else>{{ dust.purple.price.toLocaleString() }}z</span>
           </li>
-          <div class="col-12 col-sm-12 col-md-12 col-lg-4 p-0 text-right">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-4 text-right">
             <em class="text-info small">
-              * Exchange prices powered by <a href="https://poporing.life">Poporing Life</a>
+              * Exchange prices powered by
+              <a
+                target="_blank"
+                href="https://poporing.life">Poporing Life</a>
             </em>
           </div>
         </ul>
@@ -190,13 +152,20 @@
     </div>
     <div class="row">
       <div
-        v-if="loading"
+        v-if="!filteredCards.length"
         class="col-12">
         <div class="card mb-3">
           <div class="card-body bg-warning">
-            <h5>
-              <b-spinner 
-                label="loading..."></b-spinner> Data loading...</h5>
+            <h5
+              v-if="loading"
+              class="m-0">
+              <b-spinner label="loading..."/>&nbsp;&nbsp;Data loading...
+            </h5>
+            <h5
+              v-else
+              class="m-0">
+              <i class="fas fa-exclamation-triangle"/>&nbsp;&nbsp;No matching card found.
+            </h5>
           </div>
         </div>
       </div>
@@ -285,10 +254,24 @@
         </div>
       </div>
     </div>
+    <div
+      :class="{ active: showBackToTopBtn }"
+      class="back-to-top bg-info"
+      title="Back to Top">
+      <a
+        class="text-light"
+        @click="scrollToTop()"><i class="fas fa-arrow-alt-circle-up fa-2x" /></a>
+    </div>
   </div>
 </template>
 <script src="./card-list.js"></script>
 <style scoped>
+p {
+  margin-bottom: 0.25rem;
+}
+.row ul {
+  padding-inline-start: 30px;
+}
 .form-group {
   font-size: 0.875rem;
 }
@@ -300,9 +283,6 @@
 }
 .card-body, .card-header {
   font-family: 'Andika', Helvetica, Arial, sans-serif;
-}
-p {
-  margin-bottom: 0.25rem;
 }
 .card-body ul.main-effect {
   font-size: 1rem;
@@ -371,5 +351,29 @@ p {
   height: 0.875rem;
   font-size: 0.5rem;
   vertical-align: middle;
+}
+.back-to-top {
+  position: fixed;
+  right: -70px;
+  bottom: 10px;
+  width: 70px;
+  height: 50px;
+  text-align: center;
+  cursor: pointer;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  opacity: 0.7;
+  transition: right 0.3s ease-in-out;
+}
+.back-to-top i {
+  opacity: 0;
+  line-height: 50px;
+}
+.back-to-top.active {
+  right: 0px;
+}
+.back-to-top.active i {
+  opacity: 1;
+  transition: opacity 2s;
 }
 </style>

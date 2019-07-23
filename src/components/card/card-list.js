@@ -34,6 +34,7 @@ export default {
         { name: 'Exchange Price (High)', value: 'eprice-high' },
       ],
       loading: true,
+      showBackToTopBtn: false,
     };
   },
   created() {
@@ -146,6 +147,12 @@ export default {
         data.loading = false;
       }));
   },
+  beforeMount() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
   computed: {
     filteredCards: function filteredCards() {
       const name = this.filters.name.toLowerCase();
@@ -230,6 +237,17 @@ export default {
   methods: {
     clickTag: function clickTag(filter, value) {
       this.filters[filter] = value;
+    },
+    handleScroll: function handleScroll() {
+      const ws = window.getComputedStyle(document.body, ':before').content;
+      if (ws === '"sm"' || ws === '"xs"') {
+        this.showBackToTopBtn = window.scrollY > 645;
+      } else {
+        this.showBackToTopBtn = window.scrollY > 400;
+      }
+    },
+    scrollToTop: function scrollToTop() {
+      window.scrollTo(0, 50);
     },
   },
 };

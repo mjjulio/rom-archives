@@ -43,9 +43,12 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 70px;
+  padding-top: 70px;
+  background: linear-gradient(90deg, azure, transparent, floralwhite);
 }
-
+html {
+  scroll-behavior: smooth;
+}
 nav {
   font-family: 'Andika', Helvetica, Arial, sans-serif;
   box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),
@@ -65,5 +68,31 @@ p {
 }
 .loading img {
   margin-top: -135px;
+}
+
+body:before {
+  content: 'xs';
+  display: none;
+  visibility: hidden;
+}
+@media (min-width: 576px) {
+  body:before {
+    content: "sm";
+  }
+}
+@media (min-width: 768px) {
+  body:before {
+    content: "md";
+  }
+}
+@media (min-width: 992px) {
+  body:before {
+    content: "lg";
+  }
+}
+@media (min-width: 1200px) {
+  body:before {
+  content: "xl";
+  }
 }
 </style>
