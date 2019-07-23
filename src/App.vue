@@ -44,10 +44,12 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   padding-top: 70px;
-  background: linear-gradient(90deg, azure, transparent, floralwhite);
 }
 html {
   scroll-behavior: smooth;
+}
+body {
+  background: linear-gradient(90deg, azure, transparent, floralwhite);
 }
 nav {
   font-family: 'Andika', Helvetica, Arial, sans-serif;
