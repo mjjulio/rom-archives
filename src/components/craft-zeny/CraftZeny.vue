@@ -31,6 +31,38 @@
         </span>
       </div>
     </div>
+    <div class="row">
+      <div class="col-6 mb-3">
+        <div class="card">
+          <div class="card-header">{{ modifiedList[0].name }}</div>
+          <div class="card-body">
+            <p class="card-text">{{ modifiedList[0].mainEffect }}</p>
+            <p class="card-text">
+              <span class="text-info">Deposit:</span>&nbsp;&nbsp;{{ modifiedList[0].depositEffect }}
+            </p>
+            <p class="card-text">
+              <span class="text-info">Unlock:</span>&nbsp;&nbsp;{{ modifiedList[0].unlockEffect }}
+            </p>
+            <hr>
+            <p
+              v-for="(material, index) in modifiedList[0].materials.normal"
+              :key="index"
+              class="card-text">
+              <!-- {{ material.price.toLocaleString() }}z -->
+              {{ material.quantity }} x <span class="text-primary">{{ material.name }}</span>
+              = {{ material.total.toLocaleString() }}z
+            </p>
+            <p
+              v-for="(material, index) in modifiedList[0].materials.special"
+              :key="index"
+              class="card-text">
+              {{ material.quantity }} x {{ material.name }}
+            </p>
+            <p>Crafting Fee = {{ modifiedList[0].craftFee.toLocaleString() }}z</p>
+          </div>
+        </div>
+      </div>
+    </div>
     <table class="table table-striped table-bordered">
       <tr>
         <th style="width: 35%">Headgear</th>
@@ -75,7 +107,10 @@
                 <td>{{ material.name }}</td>
                 <td class="text-right">{{ material.quantity }}</td>
                 <td class="text-right">{{ material.price.toLocaleString() }}z</td>
-                <td class="text-right">{{ material.total.toLocaleString() }}z</td>
+                <td class="text-right">
+                  {{ material.total.toLocaleString() }}z
+                  <span ngIf="!material.volume">*</span>
+                </td>
               </tr>
               <tr
                 v-for="(material, index) in headgear.materials.special"
@@ -238,5 +273,11 @@
   }
   .form-group label {
     font-weight: 700;
+  }
+  .card-body {
+  padding: 1rem;
+  font-size: 0.875rem;
+  /* white-space: pre-line; */
+  /* word-break: break-word; */
   }
 </style>

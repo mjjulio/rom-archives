@@ -64,12 +64,14 @@ export default {
             name: material.item_name.replace(/_/g, ' '),
             price: material.data.price,
             lastKnownPrice: material.data.last_known_price,
+            volume: material.data.volume,
           });
         });
         addMats.data.data.forEach((addMat) => {
           data.materials.push({
             name: addMat.item_name.replace(/_/g, ' '),
             price: addMat.data.price,
+            lastKnownPrice: addMat.data.last_known_price,
           });
         });
         headgears.data.forEach((headgear) => {
@@ -89,14 +91,14 @@ export default {
                 });
               } else {
                 const found = data.materials.find(material => material.name === name.toLowerCase());
-                const price = found ? found.price || found.lastKnownPrice : 0;
+                const price = found ? found.price || found.lastKnownPrice || 0 : 0;
                 if (!price && !bpMaterials.missing) {
                   bpMaterials.missing = true;
                 }
                 const total = quantity * price;
                 grandTotal += total;
                 bpMaterials.normal.push({
-                  name, quantity, price, total,
+                  name, quantity, price, total, volume: found ? found.volume : 0
                 });
               }
             });

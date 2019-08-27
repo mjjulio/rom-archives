@@ -6,46 +6,50 @@
     <hr>
     <div>
       <table
-        class="table table-bordered">
-        <tr
-          class="text-center">
-          <th width="20%">4th Enchantment</th>
-          <th width="8%">Weapon</th>
-          <th width="8">Armor</th>
-          <th width="8%">Garment</th>
-          <th width="8%">Shoes</th>
-          <th width="8%">Accessory</th>
-          <th width="8%">Head</th>
-          <th width="8%">Face</th>
-          <th width="8%">Mouth</th>
-          <th width="8%">Back</th>
-          <th width="8%">Tail</th>
-        </tr>
-        <tr v-if="loading">
-          <td
-            class="text-center"
-            colspan="11">
-            <div class="loading"><img src="@/assets/loading.gif"></div>
-          </td>
-        </tr>
-        <tr
-          v-for="(enchant, index) in fourthEnc"
-          :key="index">
-          <td>
-            <span class="font-weight-bold">{{ enchant.name }}</span>
-            <span class="small">{{ enchant.subName }}</span>
-          </td>
-          <td class="enc-matrix"><i :class="[ enchant.weapon ? checkClass : timesClass]" /></td>
-          <td class="enc-matrix"><i :class="[ enchant.armor ? checkClass : timesClass]" /></td>
-          <td class="enc-matrix"><i :class="[ enchant.garment ? checkClass : timesClass]" /></td>
-          <td class="enc-matrix"><i :class="[ enchant.shoes ? checkClass : timesClass]" /></td>
-          <td class="enc-matrix"><i :class="[ enchant.accessory ? checkClass : timesClass]" /></td>
-          <td class="enc-matrix"><i :class="[ enchant.head ? checkClass : timesClass]" /></td>
-          <td class="enc-matrix"><i :class="[ enchant.face ? checkClass : timesClass]" /></td>
-          <td class="enc-matrix"><i :class="[ enchant.mouth ? checkClass : timesClass]" /></td>
-          <td class="enc-matrix"><i :class="[ enchant.back ? checkClass : timesClass]" /></td>
-          <td class="enc-matrix"><i :class="[ enchant.tail ? checkClass : timesClass]" /></td>
-        </tr>
+        class="table table-bordered table-striped">
+        <thead>
+          <tr
+            class="text-center">
+            <th width="20%">4th Enchantment</th>
+            <th width="8%">Weapon</th>
+            <th width="8">Armor</th>
+            <th width="8%">Garment</th>
+            <th width="8%">Shoes</th>
+            <th width="8%">Accessory</th>
+            <th width="8%">Head</th>
+            <th width="8%">Face</th>
+            <th width="8%">Mouth</th>
+            <th width="8%">Back</th>
+            <th width="8%">Tail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="loading">
+            <td
+              class="text-center"
+              colspan="11">
+              <div class="loading"><img src="@/assets/loading.gif"></div>
+            </td>
+          </tr>
+          <tr
+            v-for="(enchant, index) in fourthEnc"
+            :key="index">
+            <td>
+              <span class="font-weight-bold">{{ enchant.name }}</span>
+              <span class="small">{{ enchant.subName }}</span>
+            </td>
+            <td class="enc-matrix"><i :class="[ enchant.weapon ? checkClass : timesClass]" /></td>
+            <td class="enc-matrix"><i :class="[ enchant.armor ? checkClass : timesClass]" /></td>
+            <td class="enc-matrix"><i :class="[ enchant.garment ? checkClass : timesClass]" /></td>
+            <td class="enc-matrix"><i :class="[ enchant.shoes ? checkClass : timesClass]" /></td>
+            <td class="enc-matrix"><i :class="[ enchant.accessory ? checkClass : timesClass]" /></td>
+            <td class="enc-matrix"><i :class="[ enchant.head ? checkClass : timesClass]" /></td>
+            <td class="enc-matrix"><i :class="[ enchant.face ? checkClass : timesClass]" /></td>
+            <td class="enc-matrix"><i :class="[ enchant.mouth ? checkClass : timesClass]" /></td>
+            <td class="enc-matrix"><i :class="[ enchant.back ? checkClass : timesClass]" /></td>
+            <td class="enc-matrix"><i :class="[ enchant.tail ? checkClass : timesClass]" /></td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <br>
@@ -97,6 +101,9 @@
 </script>
 <!-- styling for the component -->
 <style scoped>
+  .table {
+    background-color: white;
+  }
   .table, .form-group {
     font-size: 0.875rem;
   }
