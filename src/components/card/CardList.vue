@@ -207,6 +207,10 @@
                 class="btn-sm material-btn"
                 variant="outline-primary">MATERIALS</b-button>
             </p>
+            <!-- <hr>
+            <p>
+              <span class="text-info">Gram Dust Price/Ratio:</span>&nbsp;&nbsp;{{ card.dustPrice.toLocaleString }}z
+            </p> -->
             <b-collapse
               v-if="card.materials.length"
               :id="`collapse-${index}`"

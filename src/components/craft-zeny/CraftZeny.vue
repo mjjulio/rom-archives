@@ -56,7 +56,7 @@
               v-for="(material, index) in modifiedList[0].materials.special"
               :key="index"
               class="card-text">
-              {{ material.quantity }} x {{ material.name }}
+              {{ material.quantity }} x <span class="text-primary">{{ material.name }}</span>
             </p>
             <p>Crafting Fee = {{ modifiedList[0].craftFee.toLocaleString() }}z</p>
           </div>

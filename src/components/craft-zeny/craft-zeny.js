@@ -35,6 +35,7 @@ export default {
         { name: 'The turkey goes gobble; gobble; gobble!', bpName: 'turkey_grr_blueprint' },
         { name: 'Unit-05 Helmet', bpName: 'unit.05_helmet_blueprint' },
       ],
+      specialItem: ['Black Wing', 'Clock', 'Snowman', 'Floating Coin', 'Ancient Mithril Coin'],
       loading: true,
     };
   },
@@ -72,6 +73,7 @@ export default {
             name: addMat.item_name.replace(/_/g, ' '),
             price: addMat.data.price,
             lastKnownPrice: addMat.data.last_known_price,
+            volume: addMat.data.volume,
           });
         });
         headgears.data.forEach((headgear) => {
@@ -82,10 +84,11 @@ export default {
               special: [],
               missing: false,
             };
-            headgear.craftMaterials.split(', ').forEach((mat) => {
+            headgear.craftMaterials.split(/;\s|,\s/).forEach((mat) => {
               const quantity = Number(mat.substr(0, mat.indexOf(' ')));
               const name = mat.substr(mat.indexOf(' ') + 1);
-              if (name === 'Black Wing' || name === 'Clock' || name === 'Snowman') {
+              if (data.specialItem.indexOf(name) >= 0) {
+              // if (name === 'Black Wing' || name === 'Clock' || name === 'Snowman') {
                 bpMaterials.special.push({
                   name, quantity
                 });
