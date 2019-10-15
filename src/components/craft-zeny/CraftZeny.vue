@@ -86,10 +86,10 @@
         :key="index">
         <td>
           <p><strong>{{ headgear.name }}</strong></p>
-          <p>{{ headgear.mainEffect }}</p>
+          <p>{{ headgear.effect.main }}</p>
           <br>
-          <p><span class="text-info">Unlock:</span>&nbsp;&nbsp;{{ headgear.unlockEffect }}</p>
-          <p><span class="text-info">Deposit:</span>&nbsp;&nbsp;{{ headgear.depositEffect }}</p>
+          <p><span class="text-info">Craft / Unlock:</span>&nbsp;&nbsp;{{ headgear.effect.unlock }}</p>
+          <p><span class="text-info">Deposit:</span>&nbsp;&nbsp;{{ headgear.effect.deposit }}</p>
         </td>
         <td>
           <p>
@@ -109,7 +109,7 @@
                 <td class="text-right">{{ material.price.toLocaleString() }}z</td>
                 <td class="text-right">
                   {{ material.total.toLocaleString() }}z
-                  <span v-if="!material.volume">{{ Number.isInteger(material.volume) }}</span>
+                  <!-- <span v-if="!material.volume">{{ Number.isInteger(material.volume) }}</span> -->
                 </td>
               </tr>
               <tr
@@ -135,7 +135,7 @@
           <p>
             <span class="text-info">Blueprint:</span><br>
             &nbsp;&nbsp;&bull; <span class="text-info">Exchange Price:</span>&nbsp;
-            <span v-if="headgear.blueprint.tradeable === 'No'"><i>non-tradeable</i></span>
+            <span v-if="!headgear.blueprint.tradeable"><i>non-tradeable</i></span>
             <span v-else-if="headgear.blueprint.exchange > 0">
               {{ headgear.blueprint.exchange.toLocaleString() }}z
             </span>
@@ -144,7 +144,7 @@
               class="text-danger">NO DATA</span>
             <br>
             &nbsp;&nbsp;&bull; <span class="text-info">NPC Price:</span>&nbsp;
-            {{ headgear.blueprint.cost }}<br>
+            {{ headgear.blueprint.cost ? headgear.blueprint.cost : 'N/A' }}<br>
           </p>
           <p>
             <span class="text-info">Craft Fee:</span>&nbsp;
@@ -155,71 +155,49 @@
           </p>
         </td>
         <td>
-          <div v-if="headgear.blueprint.tradeable === 'No'">
+          <p>
             <strong>
               {{ headgear.total.toLocaleString() }}z
-              <!-- <span v-if="headgear.name !== 'Sakura Bride'">+ {{ headgear.blueprint.cost }}</span> -->
               <span v-if="headgear.specialTotal">+ {{ headgear.specialTotal }}</span>
             </strong>
+            <span v-if="!headgear.blueprint.exchange && headgear.blueprint.tradeable">
+              <br><i class="text-danger">*lacking blueprint price</i>
+            </span>
             <span v-if="headgear.materials.missing">
               <br><i class="text-danger">*lacking material price</i>
             </span>
             <span v-if="!headgear.craftFee">
               <br><i class="text-danger">*lacking craft fee</i>
             </span>
-          </div>
-          <div v-else>
+          </p>
+          <div v-if="headgear.blueprint.cost && headgear.blueprint.tradeable">
+            <p><i>-or-</i></p>
             <p>
-              <strong>
-                {{ headgear.total.toLocaleString() }}z
-                <span v-if="headgear.specialTotal">+ {{ headgear.specialTotal }}</span>
-                <!-- <span
-                  v-for="(material, index) in headgear.materials.special"
-                  :key="index">
-                  + {{ material.quantity }} {{ material.name }}
-                </span> -->
-              </strong>
-              <span v-if="headgear.blueprint.exchange === 0">
-                <br><i class="text-danger">*lacking blueprint price</i>
-              </span>
-              <span v-if="headgear.materials.missing">
-                <br><i class="text-danger">*lacking material price</i>
-              </span>
-              <span v-if="!headgear.craftFee">
-                <br><i class="text-danger">*lacking craft fee</i>
-              </span>
+              {{ (headgear.total - headgear.blueprint.exchange).toLocaleString() }}z
+              + {{ headgear.blueprint.cost }}
+              <span v-if="headgear.specialTotal">+ {{ headgear.specialTotal }}</span>
             </p>
-            <div v-if="headgear.blueprint.cost !== 'N/A'">
-              <p><i>-or-</i></p>
-              <p>
-                {{ (headgear.total - headgear.blueprint.exchange).toLocaleString() }}z
-                + {{ headgear.blueprint.cost }}
-                <!-- <span
-                  v-for="(material, index) in headgear.materials.special"
-                  :key="index"> + {{ material }}</span> -->
-              </p>
-            </div>
           </div>
           <br>
           <p>
             <span :class="{ 'highlight' : (filters.sort.indexOf('patk') >= 0) }">
               <span class="text-info">Zeny/ATK Ratio:</span>&nbsp;
-              {{ headgear.atkZenyRatio.toLocaleString() }}z
-              <span class="text-muted">[ATK +{{ headgear.atk }}]</span>
+              {{ headgear.stats.atkz.toLocaleString() }}z
+              <span class="text-muted">[ATK +{{ headgear.stats.atk }}]</span>
             </span>
           </p>
           <p>
             <span :class="{ 'highlight' : (filters.sort.indexOf('matk') >= 0) }">
               <span class="text-info">Zeny/MATK Ratio:</span>&nbsp;
-              {{ headgear.matkZenyRatio.toLocaleString() }}z
-              <span class="text-muted">[M.ATK +{{ headgear.matk }}]</span>
+              {{ headgear.stats.matkz.toLocaleString() }}z
+              <span class="text-muted">[M.ATK +{{ headgear.stats.matk }}]</span>
             </span>
           </p>
           <p>
             <span :class="{ 'highlight' : (filters.sort.indexOf('hp') >= 0) }">
               <span class="text-info">Zeny/HP Ratio:</span>&nbsp;
-              {{ headgear.hpZenyRatio.toLocaleString() }}z
-              <span class="text-muted">[Max HP +{{ headgear.maxHP }}]</span>
+              {{ headgear.stats.hpz.toLocaleString() }}z
+              <span class="text-muted">[Max HP +{{ headgear.stats.hp }}]</span>
             </span>
           </p>
         </td>

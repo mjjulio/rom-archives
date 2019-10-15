@@ -104,7 +104,6 @@ export default {
               const quantity = Number(mat.substr(0, mat.indexOf(' ')));
               const name = mat.substr(mat.indexOf(' ') + 1);
               if (data.specialItem.indexOf(name) >= 0) {
-              // if (name === 'Black Wing' || name === 'Clock' || name === 'Snowman') {
                 _materials.special.push({
                   name, quantity
                 });
@@ -123,8 +122,8 @@ export default {
               }
             });
             const _blueprint = {
-              cost: headgear.blueprintCost,
-              tradeable: headgear.blueprintTradeable,
+              cost: headgear.blueprintCost !== 'N/A' ? headgear.blueprintCost : '',
+              tradeable: headgear.blueprintTradeable === 'Yes',
               exchange: 0,
               snapping: false,
             };
@@ -159,43 +158,45 @@ export default {
             const craftFee = Number(headgear.craftFee.replace(/[^0-9]/g, ''));
             grandTotal += craftFee;
 
-            let maxHP = 0;
-            let atk = 0;
-            let matk = 0;
+            const stats = {
+              hp: 0,
+              atk: 0,
+              matk: 0,
+              hpz: 0,
+              atkz: 0,
+              matkz: 0,
+            };
             headgear.craftEffect.concat('; ', headgear.depositEffect).split('; ').forEach((effect) => {
               const h = effect.indexOf('Max HP');
               const m = effect.indexOf('M.Atk');
               const a = effect.indexOf('Atk');
               const v = Number(effect.substr(effect.indexOf('+') + 1));
               if (h >= 0) {
-                maxHP += v;
+                stats.hp += v;
               } else if (m >= 0) {
-                matk += v;
+                stats.matk += v;
               } else if (a >= 0 && m < 0) {
-                atk += v;
+                stats.atk += v;
               }
             });
-            const hpZenyRatio = maxHP > 0 ? Number((grandTotal / maxHP).toFixed(2)) : 0;
-            const matkZenyRatio = matk > 0 ? Number((grandTotal / matk).toFixed(2)) : 0;
-            const atkZenyRatio = atk > 0 ? Number((grandTotal / atk).toFixed(2)) : 0;
+            stats.hpz = stats.hp > 0 ? Number((grandTotal / stats.hp).toFixed(2)) : 0;
+            stats.matkz = stats.matk > 0 ? Number((grandTotal / stats.matk).toFixed(2)) : 0;
+            stats.atkz = stats.atk > 0 ? Number((grandTotal / stats.atk).toFixed(2)) : 0;
 
             data.headgears.push({
               name: headgear.name,
               type: headgear.type,
-              mainEffect: headgear.mainEffect,
-              unlockEffect: headgear.craftEffect,
-              depositEffect: headgear.depositEffect,
+              effect: {
+                main: headgear.mainEffect,
+                unlock: headgear.craftEffect,
+                deposit: headgear.depositEffect,
+              },
               blueprint: _blueprint,
               materials: _materials,
               craftFee,
               total: grandTotal,
               specialTotal: specialTotal.join(' + '),
-              maxHP,
-              hpZenyRatio,
-              atk,
-              atkZenyRatio,
-              matk,
-              matkZenyRatio,
+              stats,
             });
           }
         });
@@ -236,35 +237,35 @@ export default {
           break;
         case 'price-hp-low':
           headgears.sort((a, b) => a.total - b.total);
-          key = 'maxHP';
+          key = 'hp';
           break;
         case 'price-hp-high':
           headgears.sort((a, b) => b.total - a.total);
-          key = 'maxHP';
+          key = 'hp';
           break;
         case 'hp-ratio-low':
           headgears.sort((a, b) => a.hpZenyRatio - b.hpZenyRatio);
-          key = 'hpZenyRatio';
+          key = 'hpz';
           break;
         case 'hp-ratio-high':
           headgears.sort((a, b) => b.hpZenyRatio - a.hpZenyRatio);
-          key = 'hpZenyRatio';
+          key = 'hpz';
           break;
         case 'patk-ratio-low':
           headgears.sort((a, b) => a.atkZenyRatio - b.atkZenyRatio);
-          key = 'atkZenyRatio';
+          key = 'atkz';
           break;
         case 'patk-ratio-high':
           headgears.sort((a, b) => b.atkZenyRatio - a.atkZenyRatio);
-          key = 'atkZenyRatio';
+          key = 'atkz';
           break;
         case 'matk-ratio-low':
           headgears.sort((a, b) => a.matkZenyRatio - b.matkZenyRatio);
-          key = 'matkZenyRatio';
+          key = 'matkz';
           break;
         case 'matk-ratio-high':
           headgears.sort((a, b) => b.matkZenyRatio - a.matkZenyRatio);
-          key = 'matkZenyRatio';
+          key = 'matkz';
           break;
         default:
       }
@@ -273,10 +274,10 @@ export default {
         const incomplete = [];
         const sorted = [];
         headgears.forEach((headgear) => {
-          if (!headgear[key]) {
+          if (!headgear.stats[key]) {
             exclude.push(headgear);
           } else if (headgear.materials.missing ||
-            (headgear.blueprint.exchange === 0 && headgear.blueprint.tradeable === 'Yes')) {
+            (!headgear.blueprint.exchange && headgear.blueprint.tradeable)) {
             incomplete.push(headgear);
           } else {
             sorted.push(headgear);
