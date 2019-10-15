@@ -103,18 +103,18 @@
               </tr>
               <tr
                 v-for="(material, index) in headgear.materials.normal"
-                :key="index">
+                :key="headgear.name + 'material' + index">
                 <td>{{ material.name }}</td>
                 <td class="text-right">{{ material.quantity }}</td>
                 <td class="text-right">{{ material.price.toLocaleString() }}z</td>
                 <td class="text-right">
                   {{ material.total.toLocaleString() }}z
-                  <span ngIf="!material.volume">*</span>
+                  <span v-if="!material.volume">{{ Number.isInteger(material.volume) }}</span>
                 </td>
               </tr>
               <tr
                 v-for="(material, index) in headgear.materials.special"
-                :key="index">
+                :key="headgear.name + 'special' + index">
                 <td>{{ material.name }}</td>
                 <td class="text-right">{{ material.quantity }}</td>
                 <td/>
@@ -135,16 +135,16 @@
           <p>
             <span class="text-info">Blueprint:</span><br>
             &nbsp;&nbsp;&bull; <span class="text-info">Exchange Price:</span>&nbsp;
-            <span v-if="headgear.blueprintTradeable === 'No'"><i>non-tradeable</i></span>
-            <span v-else-if="headgear.bpExchangePrice > 0">
-              {{ headgear.bpExchangePrice.toLocaleString() }}z
+            <span v-if="headgear.blueprint.tradeable === 'No'"><i>non-tradeable</i></span>
+            <span v-else-if="headgear.blueprint.exchange > 0">
+              {{ headgear.blueprint.exchange.toLocaleString() }}z
             </span>
             <span
               v-else
               class="text-danger">NO DATA</span>
             <br>
             &nbsp;&nbsp;&bull; <span class="text-info">NPC Price:</span>&nbsp;
-            {{ headgear.blueprintCost }}<br>
+            {{ headgear.blueprint.cost }}<br>
           </p>
           <p>
             <span class="text-info">Craft Fee:</span>&nbsp;
@@ -155,15 +155,11 @@
           </p>
         </td>
         <td>
-          <div v-if="headgear.blueprintTradeable === 'No'">
+          <div v-if="headgear.blueprint.tradeable === 'No'">
             <strong>
               {{ headgear.total.toLocaleString() }}z
-              <span v-if="headgear.name !== 'Sakura Bride'">+ {{ headgear.blueprintCost }}</span>
-              <span
-                v-for="(material, index) in headgear.materials.special"
-                :key="index">
-                + {{ material.quantity }} {{ material.name }}
-              </span>
+              <!-- <span v-if="headgear.name !== 'Sakura Bride'">+ {{ headgear.blueprint.cost }}</span> -->
+              <span v-if="headgear.specialTotal">+ {{ headgear.specialTotal }}</span>
             </strong>
             <span v-if="headgear.materials.missing">
               <br><i class="text-danger">*lacking material price</i>
@@ -176,13 +172,14 @@
             <p>
               <strong>
                 {{ headgear.total.toLocaleString() }}z
-                <span
+                <span v-if="headgear.specialTotal">+ {{ headgear.specialTotal }}</span>
+                <!-- <span
                   v-for="(material, index) in headgear.materials.special"
                   :key="index">
                   + {{ material.quantity }} {{ material.name }}
-                </span>
+                </span> -->
               </strong>
-              <span v-if="headgear.bpExchangePrice === 0">
+              <span v-if="headgear.blueprint.exchange === 0">
                 <br><i class="text-danger">*lacking blueprint price</i>
               </span>
               <span v-if="headgear.materials.missing">
@@ -192,14 +189,14 @@
                 <br><i class="text-danger">*lacking craft fee</i>
               </span>
             </p>
-            <div v-if="headgear.blueprintCost !== 'N/A'">
+            <div v-if="headgear.blueprint.cost !== 'N/A'">
               <p><i>-or-</i></p>
               <p>
-                {{ (headgear.total - headgear.bpExchangePrice).toLocaleString() }}z
-                + {{ headgear.blueprintCost }}
-                <span
+                {{ (headgear.total - headgear.blueprint.exchange).toLocaleString() }}z
+                + {{ headgear.blueprint.cost }}
+                <!-- <span
                   v-for="(material, index) in headgear.materials.special"
-                  :key="index"> + {{ material }}</span>
+                  :key="index"> + {{ material }}</span> -->
               </p>
             </div>
           </div>
