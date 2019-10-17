@@ -32,38 +32,168 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-6 mb-3">
+      <div
+        v-for="(headgear, index) in modifiedList"
+        :key="index"
+        class="col-4 mb-3">
         <div class="card">
-          <div class="card-header">{{ modifiedList[0].name }}</div>
+          <div class="card-header">{{ headgear.name }}</div>
           <div class="card-body">
-            <p class="card-text">{{ modifiedList[0].mainEffect }}</p>
             <p class="card-text">
-              <span class="text-info">Deposit:</span>&nbsp;&nbsp;{{ modifiedList[0].depositEffect }}
+              <ul class="card-text main-effect">
+                <li
+                  v-for="(effect, index) of headgear.effect.main"
+                  :key="index">{{ effect }}</li>
+              </ul>
             </p>
             <p class="card-text">
-              <span class="text-info">Unlock:</span>&nbsp;&nbsp;{{ modifiedList[0].unlockEffect }}
+              <span class="text-info">Deposit:</span>
+              &nbsp;{{ headgear.effect.deposit }}
+            </p>
+            <p class="card-text">
+              <span class="text-info">Craft / Unlock:</span>
+              &nbsp;{{ headgear.effect.unlock }}
             </p>
             <hr>
-            <p
-              v-for="(material, index) in modifiedList[0].materials.normal"
-              :key="index"
-              class="card-text">
-              <!-- {{ material.price.toLocaleString() }}z -->
-              {{ material.quantity }} x <span class="text-primary">{{ material.name }}</span>
-              = {{ material.total.toLocaleString() }}z
+            <p class="card-text">
+              <span class="text-info">Source:</span>
+              <span :class="{ 'text-muted' : headgear.item.source === 'None' }">
+                &nbsp;{{ headgear.item.source }}
+              </span>
             </p>
-            <p
-              v-for="(material, index) in modifiedList[0].materials.special"
-              :key="index"
-              class="card-text">
-              {{ material.quantity }} x <span class="text-primary">{{ material.name }}</span>
+            <p class="card-text">
+              <span class="text-info">NPC Price:</span>
+              <span :class="{ 'text-muted' : headgear.item.price === 'N/A' }">
+                &nbsp;{{ headgear.item.price }}
+              </span>
             </p>
-            <p>Crafting Fee = {{ modifiedList[0].craftFee.toLocaleString() }}z</p>
+            <p class="card-text">
+              <span class="text-info">Exchange Price:</span>
+              &nbsp;
+              <span v-if="!headgear.item.tradeable">
+                <em class="text-muted">non-tradeable</em>
+              </span>
+              <span v-else-if="!headgear.item.exchange">
+                <span class="text-warning">NO DATA</span>
+              </span>
+              <span v-else>
+                {{ headgear.item.exchange.toLocaleString() }}z
+              </span>
+            </p>
+            <div v-if="headgear.craft">
+              <p>
+                <span class="text-info">Crafted Price:</span>
+                &nbsp;{{ headgear.craft.price.toLocaleString() }}z
+                <span v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</span>
+                <span v-if="!headgear.blueprint.exchange && headgear.blueprint.tradeable">
+                  <br><i class="text-danger">*lacking blueprint price</i>
+                </span>
+                <span v-if="headgear.materials.missing">
+                  <br><i class="text-danger">*lacking material price</i>
+                </span>
+                <span v-if="!headgear.craft.fee">
+                  <br><i class="text-danger">*lacking craft fee</i>
+                </span>
+              </p>
+              <p v-if="headgear.blueprint.cost && headgear.blueprint.tradeable">
+                <span class="text-info">
+                  Crafted Price
+                  <sup title="using NPC blueprint">[2nd]</sup>:
+                </span>
+                &nbsp;{{ (headgear.craft.price - headgear.blueprint.exchange).toLocaleString() }}z
+                + {{ headgear.blueprint.cost }}
+                <span v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</span>
+              </p>
+              <div class="text-right">
+                <b-button
+                  v-b-toggle="`collapse-${headgear.id}`"
+                  class="btn-sm material-btn"
+                  variant="outline-primary">MATERIALS</b-button>
+              </div>
+            </div>
+            <b-collapse
+              v-if="headgear.craft"
+              :id="`collapse-${headgear.id}`"
+              class="mt-2">
+              <div class="materials-container">
+                <div>
+                  <div>1 x <span class="text-primary">Blueprint</span></div>
+                  <ul class="bp-list">
+                    <li>
+                      <span class="text-info">Source:</span>
+                      &nbsp;{{ headgear.blueprint.source }}
+                    </li>
+                    <li v-if="headgear.blueprint.tradeable">
+                      <span class="text-info">Exchange Price:</span>
+                      &nbsp;
+                      <span
+                        v-if="!headgear.blueprint.exchange"
+                        class="text-warning">NO DATA</span>
+                      <span
+                        v-else
+                        :class="{ 'text-italic' : headgear.blueprint.snapping }">
+                        {{ headgear.blueprint.exchange.toLocaleString() }}z
+                        <sup
+                          v-if="headgear.blueprint.snapping"
+                          title="Snapping"
+                          class="text-danger">[!]</sup>
+                        <sup
+                          v-if="!headgear.blueprint.available"
+                          title="Out of Stock"
+                          class="text-danger">[NA]</sup>
+                      </span>
+                    </li>
+                    <li v-else>
+                      <span class="text-info">Exchange Price:</span>
+                      &nbsp;<em class="text-muted">non-tradeable</em>
+                    </li>
+                    <li v-if="headgear.blueprint.cost">
+                      <span class="text-info">NPC Price:</span>
+                      {{ headgear.blueprint.cost }}
+                    </li>
+                  </ul>
+                </div>
+                <p
+                  v-for="(material, index) in headgear.materials.normal"
+                  :key="headgear.id + material.name + index"
+                  class="card-text">
+                  <!-- {{ material.price.toLocaleString() }}z -->
+                  {{ material.quantity }} x <span class="text-primary">{{ material.name }}</span>
+                  = {{ material.total.toLocaleString() }}z
+                  <sup
+                    v-if="material.snapping"
+                    title="Snapping"
+                    class="text-danger">[!]</sup>
+                  <sup
+                    v-if="!material.available"
+                    title="Out of Stock"
+                    class="text-danger">[NA]</sup>
+                </p>
+                <p
+                  v-for="(material, index) in headgear.materials.special"
+                  :key="headgear.id + material.name + index"
+                  class="card-text">
+                  {{ material.quantity }} x <span class="text-primary">{{ material.name }}</span>
+                </p>
+                <p>Crafting Fee = {{ headgear.craft.fee.toLocaleString() }}z</p>
+              </div>
+            </b-collapse>
+          </div>
+          <div class="card-footer">
+            <b-badge
+              variant="info"
+              href="#"
+              @click="clickTag('type', headgear.type)">{{ headgear.type }}</b-badge>
+            <b-badge
+              v-if="headgear.craft"
+              variant="success"
+              href="#"
+              @click="clickTag('tag', 'Craft')">Craft</b-badge>
           </div>
         </div>
       </div>
     </div>
-    <table class="table table-striped table-bordered">
+    <!-- <table class="table table-striped table-bordered">
       <tr>
         <th style="width: 35%">Headgear</th>
         <th style="width: 35%">Cost Breakdown</th>
@@ -88,8 +218,14 @@
           <p><strong>{{ headgear.name }}</strong></p>
           <p>{{ headgear.effect.main }}</p>
           <br>
-          <p><span class="text-info">Craft / Unlock:</span>&nbsp;&nbsp;{{ headgear.effect.unlock }}</p>
-          <p><span class="text-info">Deposit:</span>&nbsp;&nbsp;{{ headgear.effect.deposit }}</p>
+          <p>
+            <span class="text-info">Craft / Unlock:</span>
+            &nbsp;{{ headgear.effect.unlock }}
+          </p>
+          <p>
+            <span class="text-info">Deposit:</span>
+            &nbsp;{{ headgear.effect.deposit }}
+          </p>
         </td>
         <td>
           <p>
@@ -109,7 +245,6 @@
                 <td class="text-right">{{ material.price.toLocaleString() }}z</td>
                 <td class="text-right">
                   {{ material.total.toLocaleString() }}z
-                  <!-- <span v-if="!material.volume">{{ Number.isInteger(material.volume) }}</span> -->
                 </td>
               </tr>
               <tr
@@ -121,16 +256,6 @@
                 <td/>
               </tr>
             </table>
-            <!-- <span v-for="material in headgear.materials.normal" :key="material">
-              &nbsp;&nbsp;&bull; {{ material.quantity }} {{ material.name }}&nbsp;
-              <span v-if="material.total">[{{ material.price.toLocaleString() }}z]
-                = {{ material.total.toLocaleString() }}z</span>
-              <span v-else>[<span class="text-danger">NO DATA</span>]</span>
-              <br>
-            </span>
-            <span v-for="material in headgear.materials.special" :key="material">
-              &nbsp;&nbsp;&bull; {{ material }}
-            </span> -->
           </p>
           <p>
             <span class="text-info">Blueprint:</span><br>
@@ -148,7 +273,7 @@
           </p>
           <p>
             <span class="text-info">Craft Fee:</span>&nbsp;
-            <span v-if="headgear.craftFee">{{ headgear.craftFee.toLocaleString() }}z</span>
+            <span v-if="headgear.craft.fee">{{ headgear.craft.fee.toLocaleString() }}z</span>
             <span
               v-else
               class="text-danger">NO DATA</span>
@@ -157,8 +282,8 @@
         <td>
           <p>
             <strong>
-              {{ headgear.total.toLocaleString() }}z
-              <span v-if="headgear.specialTotal">+ {{ headgear.specialTotal }}</span>
+              {{ headgear.craft.price.toLocaleString() }}z
+              <span v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</span>
             </strong>
             <span v-if="!headgear.blueprint.exchange && headgear.blueprint.tradeable">
               <br><i class="text-danger">*lacking blueprint price</i>
@@ -166,16 +291,16 @@
             <span v-if="headgear.materials.missing">
               <br><i class="text-danger">*lacking material price</i>
             </span>
-            <span v-if="!headgear.craftFee">
+            <span v-if="!headgear.craft.fee">
               <br><i class="text-danger">*lacking craft fee</i>
             </span>
           </p>
           <div v-if="headgear.blueprint.cost && headgear.blueprint.tradeable">
             <p><i>-or-</i></p>
             <p>
-              {{ (headgear.total - headgear.blueprint.exchange).toLocaleString() }}z
+              {{ (headgear.craft.price - headgear.blueprint.exchange).toLocaleString() }}z
               + {{ headgear.blueprint.cost }}
-              <span v-if="headgear.specialTotal">+ {{ headgear.specialTotal }}</span>
+              <span v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</span>
             </p>
           </div>
           <br>
@@ -202,7 +327,7 @@
           </p>
         </td>
       </tr>
-    </table>
+    </table> -->
   </div>
 </template>
 
@@ -249,10 +374,57 @@
   .form-group label {
     font-weight: 700;
   }
-  .card-body {
+p {
+  margin-bottom: 0.25rem;
+}
+.row ul {
+  padding-inline-start: 30px;
+}
+.form-group {
+  font-size: 0.875rem;
+}
+.font-size-reset {
+  font-size: 1rem;
+}
+.text-purple {
+  color: darkorchid;
+}
+.card-body, .card-header {
+  font-family: 'Andika', Helvetica, Arial, sans-serif;
+}
+.card-body ul.main-effect {
+  font-size: 1rem;
+  padding-inline-start: 1rem;
+  margin-block-end: 0.5rem;
+}
+.card-body ul.bp-list {
+  padding-inline-start: 0.5rem;
+  margin-block-end: 0.25rem;
+  list-style-type: none;
+}
+.card-body .materials-container {
+  background-color: ivory;
+  padding: 10px;
+  border-radius: 5px;
+}
+.card-header {
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+}
+.card-body {
   padding: 1rem;
   font-size: 0.875rem;
   /* white-space: pre-line; */
   /* word-break: break-word; */
-  }
+}
+.card-footer {
+  padding: 0.5rem 1rem 0.75rem;
+}
+.material-btn {
+  font-size: 0.625rem;
+  letter-spacing: 0.05rem;
+}
+.text-italic {
+  font-style: italic;
+}
 </style>

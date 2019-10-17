@@ -78,6 +78,7 @@ export default {
             displayPrice: blueprint.data.price.toLocaleString(),
             displayName: blueprint.item_name.replace(/_1s/g, '').replace(/_blueprint/g, '').replace(/_/g, ' '),
             lastKnownPrice: blueprint.data.last_known_price,
+            volume: blueprint.data.volume,
             snapping: blueprint.data.snapping,
           });
         });
@@ -89,13 +90,17 @@ export default {
               price: material.data.price,
               lastKnownPrice: material.data.last_known_price,
               volume: material.data.volume,
+              snapping: material.data.snapping,
             });
           });
         headgears.data.forEach((headgear) => {
+          let _blueprint = null;
+          let _materials = null;
+          let _craft = null;
           if (headgear.blueprintAcquire !== 'None') {
             let grandTotal = 0;
             const specialTotal = [];
-            const _materials = {
+            _materials = {
               normal: [],
               special: [],
               missing: false,
@@ -117,15 +122,22 @@ export default {
                 const total = quantity * price;
                 grandTotal += total;
                 _materials.normal.push({
-                  name, quantity, price, total, volume: found ? found.volume : 0
+                  name,
+                  quantity,
+                  price,
+                  total,
+                  available: found ? !!found.volume : false,
+                  snapping: found ? found.snapping > -1 : false,
                 });
               }
             });
-            const _blueprint = {
+            _blueprint = {
               cost: headgear.blueprintCost !== 'N/A' ? headgear.blueprintCost : '',
               tradeable: headgear.blueprintTradeable === 'Yes',
+              source: headgear.blueprintAcquire !== 'None' ? headgear.blueprintAcquire : '',
               exchange: 0,
               snapping: false,
+              available: false,
             };
             if (headgear.blueprintTradeable === 'Yes') {
               const special = data.specialCase.find(spHeadgear =>
@@ -141,7 +153,8 @@ export default {
               }
               if (bp) {
                 _blueprint.exchange = bp.price || bp.lastKnownPrice;
-                _blueprint.snapping = bp.snapping >= 0;
+                _blueprint.available = !!bp.volume;
+                _blueprint.snapping = bp.snapping > -1;
                 grandTotal += bp.price;
               } else {
                 // NOTE: temporary
@@ -183,23 +196,37 @@ export default {
             stats.matkz = stats.matk > 0 ? Number((grandTotal / stats.matk).toFixed(2)) : 0;
             stats.atkz = stats.atk > 0 ? Number((grandTotal / stats.atk).toFixed(2)) : 0;
 
-            data.headgears.push({
-              name: headgear.name,
-              type: headgear.type,
-              effect: {
-                main: headgear.mainEffect,
-                unlock: headgear.craftEffect,
-                deposit: headgear.depositEffect,
-              },
-              blueprint: _blueprint,
-              materials: _materials,
-              craftFee,
-              total: grandTotal,
-              specialTotal: specialTotal.join(' + '),
+            _craft = {
+              fee: craftFee,
+              price: grandTotal,
+              extra: specialTotal.join(' + '),
               stats,
-            });
+            };
+          } else {
+            // TODO
           }
+          data.headgears.push({
+            id: headgear.id,
+            name: headgear.name,
+            type: headgear.type,
+            effect: {
+              main: headgear.mainEffect.split(';'),
+              unlock: headgear.craftEffect,
+              deposit: headgear.depositEffect,
+            },
+            blueprint: _blueprint,
+            materials: _materials,
+            craft: _craft,
+            item: {
+              source: headgear.headgearAcquire,
+              price: headgear.headgearNpcPrice,
+              tradeable: headgear.headgearTradeable === 'Yes',
+              exchange: 0,
+            },
+            order: headgear.defaultSort
+          });
         });
+        data.headgears.sort((a, b) => a.order - b.order);
         data.loading = false;
       }));
   },
@@ -214,57 +241,57 @@ export default {
       let key = '';
       switch (filters.sort) {
         case 'price-low':
-          headgears.sort((a, b) => a.total - b.total);
+          headgears.sort((a, b) => a.craft.price - b.craft.price);
           break;
         case 'price-high':
-          headgears.sort((a, b) => b.total - a.total);
+          headgears.sort((a, b) => b.craft.price - a.craft.price);
           break;
         case 'price-patk-low':
-          headgears.sort((a, b) => a.total - b.total);
+          headgears.sort((a, b) => a.craft.price - b.craft.price);
           key = 'atk';
           break;
         case 'price-patk-high':
-          headgears.sort((a, b) => b.total - a.total);
+          headgears.sort((a, b) => b.craft.price - a.craft.price);
           key = 'atk';
           break;
         case 'price-matk-low':
-          headgears.sort((a, b) => a.total - b.total);
+          headgears.sort((a, b) => a.craft.price - b.craft.price);
           key = 'matk';
           break;
         case 'price-matk-high':
-          headgears.sort((a, b) => b.total - a.total);
+          headgears.sort((a, b) => b.craft.price - a.craft.price);
           key = 'matk';
           break;
         case 'price-hp-low':
-          headgears.sort((a, b) => a.total - b.total);
+          headgears.sort((a, b) => a.craft.price - b.craft.price);
           key = 'hp';
           break;
         case 'price-hp-high':
-          headgears.sort((a, b) => b.total - a.total);
+          headgears.sort((a, b) => b.craft.price - a.craft.price);
           key = 'hp';
           break;
         case 'hp-ratio-low':
-          headgears.sort((a, b) => a.hpZenyRatio - b.hpZenyRatio);
+          headgears.sort((a, b) => a.craft.stats.hpz - b.craft.stats.hpz);
           key = 'hpz';
           break;
         case 'hp-ratio-high':
-          headgears.sort((a, b) => b.hpZenyRatio - a.hpZenyRatio);
+          headgears.sort((a, b) => b.craft.stats.hpz - a.craft.stats.hpz);
           key = 'hpz';
           break;
         case 'patk-ratio-low':
-          headgears.sort((a, b) => a.atkZenyRatio - b.atkZenyRatio);
+          headgears.sort((a, b) => a.craft.stats.atkz - b.craft.stats.atkz);
           key = 'atkz';
           break;
         case 'patk-ratio-high':
-          headgears.sort((a, b) => b.atkZenyRatio - a.atkZenyRatio);
+          headgears.sort((a, b) => b.craft.stats.atkz - a.craft.stats.atkz);
           key = 'atkz';
           break;
         case 'matk-ratio-low':
-          headgears.sort((a, b) => a.matkZenyRatio - b.matkZenyRatio);
+          headgears.sort((a, b) => a.craft.stats.matkz - b.craft.stats.matkz);
           key = 'matkz';
           break;
         case 'matk-ratio-high':
-          headgears.sort((a, b) => b.matkZenyRatio - a.matkZenyRatio);
+          headgears.sort((a, b) => b.craft.stats.matkz - a.craft.stats.matkz);
           key = 'matkz';
           break;
         default:
@@ -274,7 +301,9 @@ export default {
         const incomplete = [];
         const sorted = [];
         headgears.forEach((headgear) => {
-          if (!headgear.stats[key]) {
+          if (!headgear.craft) {
+            exclude.push(headgear);
+          } else if (!headgear.craft.stats[key]) {
             exclude.push(headgear);
           } else if (headgear.materials.missing ||
             (!headgear.blueprint.exchange && headgear.blueprint.tradeable)) {
