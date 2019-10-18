@@ -7,8 +7,9 @@ export default {
     return {
       blueprints: [],
       materials: [
-        { name: 'leaf of yggdrasil', price: 2000 },
-        { name: 'under the tower', price: 10000 },
+        { name: 'leaf of yggdrasil', price: 2000, volume: 1 },
+        { name: 'under the tower', price: 10000, volume: 1 },
+        { name: 'hot meal', price: 25000, volume: 1 },
       ],
       headgears: [],
       noData: [],
@@ -18,20 +19,20 @@ export default {
       },
       sortOptions: [
         { name: 'Default', value: 'default' },
-        { name: 'Total Cost - Low', value: 'price-low' },
-        { name: 'Total Cost - High', value: 'price-high' },
-        { name: 'Total Cost (ATK) - Low', value: 'price-patk-low' },
-        { name: 'Total Cost (ATK) - High', value: 'price-patk-high' },
-        { name: 'Zeny/ATK Ratio - Low', value: 'patk-ratio-low' },
-        { name: 'Zeny/ATK Ratio - High', value: 'patk-ratio-high' },
-        { name: 'Total Cost (MATK) - Low', value: 'price-matk-low' },
-        { name: 'Total Cost (MATK) - High', value: 'price-matk-high' },
-        { name: 'Zeny/MATK Ratio - Low', value: 'matk-ratio-low' },
-        { name: 'Zeny/MATK Ratio - High', value: 'matk-ratio-high' },
-        { name: 'Total Cost (HP) - Low', value: 'price-hp-low' },
-        { name: 'Total Cost (HP) - High', value: 'price-hp-high' },
-        { name: 'Zeny/HP Ratio - Low', value: 'hp-ratio-low' },
-        { name: 'Zeny/HP Ratio - High', value: 'hp-ratio-high' },
+        { name: 'Craft Cost - Low', value: 'all-low' },
+        { name: 'Craft Cost - High', value: 'all-high' },
+        { name: 'Craft Cost (ATK) - Low', value: 'patk-low' },
+        { name: 'Craft Cost (ATK) - High', value: 'patk-high' },
+        { name: 'Craft Cost (MATK) - Low', value: 'matk-low' },
+        { name: 'Craft Cost (MATK) - High', value: 'matk-high' },
+        { name: 'Craft Cost (HP) - Low', value: 'hp-low' },
+        { name: 'Craft Cost (HP) - High', value: 'hp-high' },
+        { name: 'Craft Cost per ATK - Low', value: 'patkz-low-ratio' },
+        { name: 'Craft Cost per ATK - High', value: 'patkz-high-ratio' },
+        { name: 'Craft Cost per MATK - Low', value: 'matkz-low-ratio' },
+        { name: 'Craft Cost per MATK - High', value: 'matkz-high-ratio' },
+        { name: 'Craft Cost per HP - Low', value: 'hpz-low-ratio' },
+        { name: 'Craft Cost per HP - High', value: 'hpz-high-ratio' },
       ],
       specialCase: [
         { name: 'Evil Wing', bpName: 'evil_wing_ears_blueprint' },
@@ -155,7 +156,7 @@ export default {
                 _blueprint.exchange = bp.price || bp.lastKnownPrice;
                 _blueprint.available = !!bp.volume;
                 _blueprint.snapping = bp.snapping > -1;
-                grandTotal += bp.price;
+                grandTotal += _blueprint.exchange;
               } else {
                 // NOTE: temporary
                 data.noData.push(headgear.name);
@@ -194,7 +195,7 @@ export default {
             });
             stats.hpz = stats.hp > 0 ? Number((grandTotal / stats.hp).toFixed(2)) : 0;
             stats.matkz = stats.matk > 0 ? Number((grandTotal / stats.matk).toFixed(2)) : 0;
-            stats.atkz = stats.atk > 0 ? Number((grandTotal / stats.atk).toFixed(2)) : 0;
+            stats.patkz = stats.atk > 0 ? Number((grandTotal / stats.atk).toFixed(2)) : 0;
 
             _craft = {
               fee: craftFee,
@@ -238,72 +239,19 @@ export default {
         const name = headgear.name.toUpperCase();
         return (filters.name === '' || name.indexOf(filters.name.toUpperCase()) !== -1);
       });
-      let key = '';
-      switch (filters.sort) {
-        case 'price-low':
-          headgears.sort((a, b) => a.craft.price - b.craft.price);
-          break;
-        case 'price-high':
-          headgears.sort((a, b) => b.craft.price - a.craft.price);
-          break;
-        case 'price-patk-low':
-          headgears.sort((a, b) => a.craft.price - b.craft.price);
-          key = 'atk';
-          break;
-        case 'price-patk-high':
-          headgears.sort((a, b) => b.craft.price - a.craft.price);
-          key = 'atk';
-          break;
-        case 'price-matk-low':
-          headgears.sort((a, b) => a.craft.price - b.craft.price);
-          key = 'matk';
-          break;
-        case 'price-matk-high':
-          headgears.sort((a, b) => b.craft.price - a.craft.price);
-          key = 'matk';
-          break;
-        case 'price-hp-low':
-          headgears.sort((a, b) => a.craft.price - b.craft.price);
-          key = 'hp';
-          break;
-        case 'price-hp-high':
-          headgears.sort((a, b) => b.craft.price - a.craft.price);
-          key = 'hp';
-          break;
-        case 'hp-ratio-low':
-          headgears.sort((a, b) => a.craft.stats.hpz - b.craft.stats.hpz);
-          key = 'hpz';
-          break;
-        case 'hp-ratio-high':
-          headgears.sort((a, b) => b.craft.stats.hpz - a.craft.stats.hpz);
-          key = 'hpz';
-          break;
-        case 'patk-ratio-low':
-          headgears.sort((a, b) => a.craft.stats.atkz - b.craft.stats.atkz);
-          key = 'atkz';
-          break;
-        case 'patk-ratio-high':
-          headgears.sort((a, b) => b.craft.stats.atkz - a.craft.stats.atkz);
-          key = 'atkz';
-          break;
-        case 'matk-ratio-low':
-          headgears.sort((a, b) => a.craft.stats.matkz - b.craft.stats.matkz);
-          key = 'matkz';
-          break;
-        case 'matk-ratio-high':
-          headgears.sort((a, b) => b.craft.stats.matkz - a.craft.stats.matkz);
-          key = 'matkz';
-          break;
-        default:
-      }
-      if (key) {
+
+      if (filters.sort !== 'default') {
+        let key = '';
+        let order = '';
+        let ratio = '';
+        [key, order, ratio] = filters.sort.split('-');
         const exclude = [];
         const incomplete = [];
         const sorted = [];
         headgears.forEach((headgear) => {
           if (!headgear.craft) {
             exclude.push(headgear);
-          } else if (!headgear.craft.stats[key]) {
+          } else if (key !== 'all' && !headgear.craft.stats[key]) {
             exclude.push(headgear);
           } else if (headgear.materials.missing ||
             (!headgear.blueprint.exchange && headgear.blueprint.tradeable)) {
@@ -312,6 +260,15 @@ export default {
             sorted.push(headgear);
           }
         });
+        if (ratio && order === 'low') {
+          sorted.sort((a, b) => a.craft.stats[key] - b.craft.stats[key]);
+        } else if (ratio && order === 'high') {
+          sorted.sort((a, b) => b.craft.stats[key] - a.craft.stats[key]);
+        } else if (order === 'low') {
+          sorted.sort((a, b) => a.craft.price - b.craft.price);
+        } else {
+          sorted.sort((a, b) => b.craft.price - a.craft.price);
+        }
         return sorted.concat(incomplete.concat(exclude));
       }
       return headgears;

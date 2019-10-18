@@ -83,7 +83,7 @@
             <div v-if="headgear.craft">
               <p>
                 <span class="text-info">Crafted Price:</span>
-                &nbsp;{{ headgear.craft.price.toLocaleString() }}z
+                <strong>&nbsp;{{ headgear.craft.price.toLocaleString() }}z</strong>
                 <span v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</span>
                 <span v-if="!headgear.blueprint.exchange && headgear.blueprint.tradeable">
                   <br><i class="text-danger">*lacking blueprint price</i>
@@ -103,6 +103,36 @@
                 &nbsp;{{ (headgear.craft.price - headgear.blueprint.exchange).toLocaleString() }}z
                 + {{ headgear.blueprint.cost }}
                 <span v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</span>
+              </p>
+              <p v-if="filters.sort.indexOf('patkz') > -1">
+                <span class="text-info">Craft Cost per ATK:</span>
+                <span class="highlight">
+                  &nbsp;{{ headgear.craft.stats.patkz.toLocaleString() }}z
+                </span>
+                <br>
+                <span class="text-muted">
+                  [Total Craft/Unlock & Deposit MATK = {{ headgear.craft.stats.patk }}]
+                </span>
+              </p>
+              <p v-if="filters.sort.indexOf('matkz') > -1">
+                <span class="text-info">Craft Cost per MATK:</span>
+                <span class="highlight">
+                  &nbsp;{{ headgear.craft.stats.matkz.toLocaleString() }}z
+                </span>
+                <br>
+                <span class="text-muted">
+                  [Total Craft/Unlock & Deposit MATK = {{ headgear.craft.stats.matk }}]
+                </span>
+              </p>
+              <p v-if="filters.sort.indexOf('hpz') > -1">
+                <span class="text-info">Craft Cost per HP:</span>
+                <span class="highlight">
+                  &nbsp;{{ headgear.craft.stats.hpz.toLocaleString() }}z
+                </span>
+                <br>
+                <span class="text-muted">
+                  [Total Craft/Unlock & Deposit HP = {{ headgear.craft.stats.hp }}]
+                </span>
               </p>
               <div class="text-right">
                 <b-button
