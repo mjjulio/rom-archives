@@ -15,7 +15,13 @@ export default {
       noData: [],
       filters: {
         sort: 'default',
+        previousSort: '',
         name: '',
+        mainEffect: '',
+        depositEffect: '',
+        unlockEffect: '',
+        type: '',
+        category: '',
       },
       sortOptions: [
         { name: 'Default', value: 'default' },
@@ -56,6 +62,9 @@ export default {
         'mystic_frozen',
         'awakening_potion'
       ],
+      types: ['All', 'Head', 'Face', 'Mouth', 'Tail', 'Back', 'Costume'],
+      category: ['All', 'Monster', 'Mini', 'MVP', 'Eden', 'Quest', 'EVent',
+        'Other', 'Premium', 'Gacha I', 'Gacha Feast', 'B Coin Store'],
       loading: true,
     };
   },
@@ -174,28 +183,31 @@ export default {
 
             const stats = {
               hp: 0,
-              atk: 0,
+              patk: 0,
               matk: 0,
               hpz: 0,
               atkz: 0,
               matkz: 0,
             };
-            headgear.craftEffect.concat('; ', headgear.depositEffect).split('; ').forEach((effect) => {
-              const h = effect.indexOf('Max HP');
-              const m = effect.indexOf('M.Atk');
-              const a = effect.indexOf('Atk');
-              const v = Number(effect.substr(effect.indexOf('+') + 1));
-              if (h >= 0) {
-                stats.hp += v;
-              } else if (m >= 0) {
-                stats.matk += v;
-              } else if (a >= 0 && m < 0) {
-                stats.atk += v;
-              }
-            });
+            headgear.craftEffect.concat('; ', headgear.depositEffect)
+              .split('; ')
+              .forEach((effect) => {
+                const h = effect.indexOf('Max HP');
+                const m = effect.indexOf('M.Atk');
+                const a = effect.indexOf('Atk');
+                const r = effect.indexOf('Refine');
+                const v = Number(effect.substr(effect.indexOf('+') + 1));
+                if (h >= 0) {
+                  stats.hp += v;
+                } else if (m >= 0 && r < 0) {
+                  stats.matk += v;
+                } else if (a >= 0 && m < 0 && r < 0) {
+                  stats.patk += v;
+                }
+              });
             stats.hpz = stats.hp > 0 ? Number((grandTotal / stats.hp).toFixed(2)) : 0;
             stats.matkz = stats.matk > 0 ? Number((grandTotal / stats.matk).toFixed(2)) : 0;
-            stats.patkz = stats.atk > 0 ? Number((grandTotal / stats.atk).toFixed(2)) : 0;
+            stats.patkz = stats.patk > 0 ? Number((grandTotal / stats.patk).toFixed(2)) : 0;
 
             _craft = {
               fee: craftFee,
@@ -224,7 +236,8 @@ export default {
               tradeable: headgear.headgearTradeable === 'Yes',
               exchange: 0,
             },
-            order: headgear.defaultSort
+            order: headgear.defaultSort,
+            category: headgear.class,
           });
         });
         data.headgears.sort((a, b) => a.order - b.order);
@@ -240,7 +253,8 @@ export default {
         return (filters.name === '' || name.indexOf(filters.name.toUpperCase()) !== -1);
       });
 
-      if (filters.sort !== 'default') {
+      if (filters.sort !== 'default' && filters.sort !== filters.previousSort) {
+        filters.previousSort = filters.sort;
         let key = '';
         let order = '';
         let ratio = '';

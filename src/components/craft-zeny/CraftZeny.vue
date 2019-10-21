@@ -6,17 +6,38 @@
     <hr>
     <div class="form-group row">
       <div class="col-md-3 col-sm-3 col-xs-6">
-        <label>Name</label>
+        <label class="mb-1">Name</label>
         <input
           v-model="filters.name"
-          type="text"
-          class="form-control">
+          :class="{ 'bg-warning' : filters.name }"
+          class="form-control form-control-sm">
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-6">
+        <label>Main Effect</label>
+        <input
+          v-model="filters.mainEffect"
+          :class="{ 'bg-warning' : filters.mainEffect }"
+          class="form-control form-control-sm">
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-6">
+        <label>Deposit Effect</label>
+        <input
+          v-model="filters.depositEffect"
+          :class="{ 'bg-warning' : filters.depositEffect }"
+          class="form-control form-control-sm">
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-6">
+        <label>Craft/Unlock Effect</label>
+        <input
+          v-model="filters.craftEffect"
+          :class="{ 'bg-warning' : filters.craftEffect }"
+          class="form-control form-control-sm">
       </div>
       <div class="col-md-3 col-sm-3 col-xs-6">
         <label>Sort By:</label>
         <select
           v-model="filters.sort"
-          class="form-control">
+          class="form-control form-control-sm">
           <option
             v-for="(sort, index) of sortOptions"
             :value="sort.value"
@@ -35,7 +56,7 @@
       <div
         v-for="(headgear, index) in modifiedList"
         :key="index"
-        class="col-4 mb-3">
+        class="col-12 col-sm-12 col-md-6 col-lg-4 mb-3">
         <div class="card">
           <div class="card-header">{{ headgear.name }}</div>
           <div class="card-body">
@@ -111,7 +132,9 @@
                 </span>
                 <br>
                 <span class="text-muted">
-                  [Total Craft/Unlock & Deposit MATK = {{ headgear.craft.stats.patk }}]
+                  [ Total Craft/Unlock & Deposit ATK:
+                  <strong>{{ headgear.craft.stats.patk }}</strong>
+                  ]
                 </span>
               </p>
               <p v-if="filters.sort.indexOf('matkz') > -1">
@@ -214,6 +237,10 @@
               variant="info"
               href="#"
               @click="clickTag('type', headgear.type)">{{ headgear.type }}</b-badge>
+            <b-badge
+              variant="warning"
+              href="#"
+              @click="clickTag('category', headgear.category)">{{ headgear.category }}</b-badge>
             <b-badge
               v-if="headgear.craft"
               variant="success"
