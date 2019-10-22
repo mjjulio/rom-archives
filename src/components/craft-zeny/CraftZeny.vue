@@ -13,35 +13,78 @@
           class="form-control form-control-sm">
       </div>
       <div class="col-md-3 col-sm-3 col-xs-6">
-        <label>Main Effect</label>
+        <label class="mb-1">Main Effect</label>
         <input
           v-model="filters.mainEffect"
           :class="{ 'bg-warning' : filters.mainEffect }"
           class="form-control form-control-sm">
       </div>
       <div class="col-md-3 col-sm-3 col-xs-6">
-        <label>Deposit Effect</label>
+        <label class="mb-1">Deposit Effect</label>
         <input
           v-model="filters.depositEffect"
           :class="{ 'bg-warning' : filters.depositEffect }"
           class="form-control form-control-sm">
       </div>
       <div class="col-md-3 col-sm-3 col-xs-6">
-        <label>Craft/Unlock Effect</label>
+        <label class="mb-1">Craft/Unlock Effect</label>
         <input
           v-model="filters.craftEffect"
           :class="{ 'bg-warning' : filters.craftEffect }"
           class="form-control form-control-sm">
       </div>
       <div class="col-md-3 col-sm-3 col-xs-6">
-        <label>Sort By:</label>
+        <label class="mb-1">Type:</label>
+        <select
+          v-model="filters.type"
+          :class="{ 'bg-warning' : filters.type !== '—' }"
+          class="form-control form-control-sm">
+          <option
+            v-for="(type, index) of types"
+            :value="type"
+            :key="type + index">
+            {{ type }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-6">
+        <label class="mb-1">Category:</label>
+        <select
+          v-model="filters.category"
+          :class="{ 'bg-warning' : filters.category !== '—' }"
+          class="form-control form-control-sm">
+          <option
+            v-for="(category, index) of categories"
+            :value="category"
+            :key="category + index">
+            {{ category }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-6">
+        <label class="mb-1">Tag:</label>
+        <select
+          v-model="filters.tag"
+          :class="{ 'bg-warning' : filters.tag !== '—' }"
+          class="form-control form-control-sm">
+          <option
+            v-for="(tag, index) of tags"
+            :value="tag"
+            :key="tag + index">
+            {{ tag }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-6">
+        <label class="mb-1">Sort By:</label>
         <select
           v-model="filters.sort"
+          :class="{ 'bg-warning' : filters.sort !== 'default' }"
           class="form-control form-control-sm">
           <option
             v-for="(sort, index) of sortOptions"
             :value="sort.value"
-            :key="index">
+            :key="sort.name + index">
             {{ sort.name }}
           </option>
         </select>
