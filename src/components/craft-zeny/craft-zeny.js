@@ -22,7 +22,7 @@ export default {
         category: '—',
         tag: '—',
         sort: 'default',
-        previousSort: '',
+        previousSort: 'default',
       },
       sortOptions: [
         { name: '—', value: 'default' },
@@ -66,7 +66,7 @@ export default {
       types: ['—', 'Head', 'Face', 'Mouth', 'Tail', 'Back', 'Costume'],
       categories: ['—', 'Monster', 'Mini', 'MVP', 'Eden', 'Quest', 'Event',
         'Other', 'Premium', 'Gacha I', 'Gacha Feast', 'B Coin Store'],
-      tags: ['—'],
+      tags: ['—', 'Craft', 'Tradeable', 'Element', 'Race', 'Size', 'Skill', 'Status Effect'],
       loading: true,
     };
   },
@@ -109,6 +109,7 @@ export default {
           let _blueprint = null;
           let _materials = null;
           let _craft = null;
+          const _tags = [];
           if (headgear.blueprintAcquire !== 'None') {
             let grandTotal = 0;
             const specialTotal = [];
@@ -217,9 +218,11 @@ export default {
               extra: specialTotal.join(' + '),
               stats,
             };
+            _tags.push('Tradeable');
           } else {
             // TODO
           }
+
           data.headgears.push({
             id: headgear.id,
             name: headgear.name,
@@ -240,6 +243,7 @@ export default {
             },
             order: headgear.defaultSort,
             category: headgear.class,
+            tags: headgear.tags ? headgear.tags.split(';').concat(_tags) : _tags,
           });
         });
         data.headgears.sort((a, b) => a.order - b.order);
@@ -248,11 +252,19 @@ export default {
   },
   computed: {
     modifiedList: function modifiedList() {
-      // const headgears = this.headgears.slice(0);
       const filters = this.filters;
       const headgears = this.headgears.filter((headgear) => {
         const name = headgear.name.toUpperCase();
-        return (filters.name === '' || name.indexOf(filters.name.toUpperCase()) !== -1);
+
+        return (
+          (filters.name === '' || name.indexOf(filters.name.toUpperCase()) !== -1)
+          && (filters.mainEffect === '' || this.filterEffect(headgear, 'main'))
+          && (filters.unlockEffect === '' || this.filterEffect(headgear, 'unlock'))
+          && (filters.depositEffect === '' || this.filterEffect(headgear, 'deposit'))
+          && (filters.type === '—' || filters.type === headgear.type)
+          && (filters.category === '—' || filters.category === headgear.category)
+          && (filters.tag === '—' || headgear.tags.indexOf(filters.tag) !== -1)
+        );
       });
 
       if (filters.sort !== 'default' && filters.sort !== filters.previousSort) {
@@ -289,5 +301,18 @@ export default {
       }
       return headgears;
     },
+  },
+  methods: {
+    filterEffect(headgear, effect) {
+      const hd = effect === 'main'
+        ? headgear.effect.main.join(';').toUpperCase()
+        : headgear.effect[effect].toUpperCase();
+      const fi = this.filters[`${effect}Effect`].toUpperCase();
+      let result = hd.indexOf(fi) !== -1;
+      if (fi === 'ATK' && result) {
+        result = hd.indexOf('ATK') !== (hd.indexOf('M.ATK') + 2);
+      }
+      return result;
+    }
   },
 };

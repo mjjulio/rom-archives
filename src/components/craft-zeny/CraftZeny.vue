@@ -2,39 +2,46 @@
   <div
     id="craft-zeny"
     class="container">
-    <h3 class="pt-5">Headgears - Calculated Crafting Cost</h3>
+    <h3 class="pt-5">Headgears - List</h3>
     <hr>
+    <div class="row">
+      <div class="col-12 flex-align-bottom mb-3">
+        <em class="text-info small">
+          * Exchange prices powered by <a href="https://poporing.life">Poporing Life</a>
+        </em>
+      </div>
+    </div>
     <div class="form-group row">
-      <div class="col-md-3 col-sm-3 col-xs-6">
+      <div class="col-md-3 col-sm-3 col-6">
         <label class="mb-1">Name</label>
         <input
-          v-model="filters.name"
+          v-model.lazy="filters.name"
           :class="{ 'bg-warning' : filters.name }"
           class="form-control form-control-sm">
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
+      <div class="col-md-3 col-sm-3 col-6">
         <label class="mb-1">Main Effect</label>
         <input
           v-model="filters.mainEffect"
           :class="{ 'bg-warning' : filters.mainEffect }"
           class="form-control form-control-sm">
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
+      <div class="col-md-3 col-sm-3 col-6">
         <label class="mb-1">Deposit Effect</label>
         <input
           v-model="filters.depositEffect"
           :class="{ 'bg-warning' : filters.depositEffect }"
           class="form-control form-control-sm">
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
+      <div class="col-md-3 col-sm-3 col-6">
         <label class="mb-1">Craft/Unlock Effect</label>
         <input
-          v-model="filters.craftEffect"
-          :class="{ 'bg-warning' : filters.craftEffect }"
+          v-model="filters.unlockEffect"
+          :class="{ 'bg-warning' : filters.unlockEffect }"
           class="form-control form-control-sm">
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
-        <label class="mb-1">Type:</label>
+      <div class="col-md-3 col-sm-3 col-6">
+        <label class="mb-1">Type</label>
         <select
           v-model="filters.type"
           :class="{ 'bg-warning' : filters.type !== '—' }"
@@ -47,8 +54,8 @@
           </option>
         </select>
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
-        <label class="mb-1">Category:</label>
+      <div class="col-md-3 col-sm-3 col-6">
+        <label class="mb-1">Category</label>
         <select
           v-model="filters.category"
           :class="{ 'bg-warning' : filters.category !== '—' }"
@@ -61,8 +68,8 @@
           </option>
         </select>
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
-        <label class="mb-1">Tag:</label>
+      <div class="col-md-3 col-sm-3 col-6">
+        <label class="mb-1">Tag</label>
         <select
           v-model="filters.tag"
           :class="{ 'bg-warning' : filters.tag !== '—' }"
@@ -75,8 +82,8 @@
           </option>
         </select>
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
-        <label class="mb-1">Sort By:</label>
+      <div class="col-md-3 col-sm-3 col-6">
+        <label class="mb-1">Sort By</label>
         <select
           v-model="filters.sort"
           :class="{ 'bg-warning' : filters.sort !== 'default' }"
@@ -89,10 +96,25 @@
           </option>
         </select>
       </div>
-      <div class="col-md-6 col-sm-6 col-xs-12 flex-align-bottom">
-        <span class="text-info italic">
-          * Exchange prices powered by <a href="https://poporing.life">Poporing Life</a>
-        </span>
+    </div>
+    <div class="row">
+      <div
+        v-if="!modifiedList.length"
+        class="col-12">
+        <div class="card mb-3">
+          <div class="card-body bg-warning">
+            <h5
+              v-if="loading"
+              class="m-0">
+              <b-spinner label="loading..."/>&nbsp;&nbsp;Data loading...
+            </h5>
+            <h5
+              v-else
+              class="m-0">
+              <i class="fas fa-exclamation-triangle"/>&nbsp;&nbsp;No matching headgear found.
+            </h5>
+          </div>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -148,7 +170,7 @@
               <p>
                 <span class="text-info">Crafted Price:</span>
                 <strong>&nbsp;{{ headgear.craft.price.toLocaleString() }}z</strong>
-                <span v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</span>
+                <em v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</em>
                 <span v-if="!headgear.blueprint.exchange && headgear.blueprint.tradeable">
                   <br><i class="text-danger">*lacking blueprint price</i>
                 </span>
@@ -166,38 +188,43 @@
                 </span>
                 &nbsp;{{ (headgear.craft.price - headgear.blueprint.exchange).toLocaleString() }}z
                 + {{ headgear.blueprint.cost }}
-                <span v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</span>
+                <em v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</em>
               </p>
               <p v-if="filters.sort.indexOf('patkz') > -1">
                 <span class="text-info">Craft Cost per ATK:</span>
                 <span class="highlight">
-                  &nbsp;{{ headgear.craft.stats.patkz.toLocaleString() }}z
+                  &nbsp;{{ headgear.craft.stats.patkz.toLocaleString() }}z&nbsp;
                 </span>
-                <br>
-                <span class="text-muted">
-                  [ Total Craft/Unlock & Deposit ATK:
-                  <strong>{{ headgear.craft.stats.patk }}</strong>
-                  ]
-                </span>
+              </p>
+              <p
+                v-if="filters.sort.indexOf('patk') > -1"
+                class="text-muted">
+                [ Total Craft/Unlock & Deposit ATK:
+                <strong>{{ headgear.craft.stats.patk }}</strong>
+                ]
               </p>
               <p v-if="filters.sort.indexOf('matkz') > -1">
                 <span class="text-info">Craft Cost per MATK:</span>
                 <span class="highlight">
-                  &nbsp;{{ headgear.craft.stats.matkz.toLocaleString() }}z
+                  &nbsp;{{ headgear.craft.stats.matkz.toLocaleString() }}z&nbsp;
                 </span>
                 <br>
                 <span class="text-muted">
-                  [Total Craft/Unlock & Deposit MATK = {{ headgear.craft.stats.matk }}]
+                  [ Total Craft/Unlock & Deposit MATK:
+                  <strong>{{ headgear.craft.stats.matk }}</strong>
+                  ]
                 </span>
               </p>
               <p v-if="filters.sort.indexOf('hpz') > -1">
                 <span class="text-info">Craft Cost per HP:</span>
                 <span class="highlight">
-                  &nbsp;{{ headgear.craft.stats.hpz.toLocaleString() }}z
+                  &nbsp;{{ headgear.craft.stats.hpz.toLocaleString() }}z&nbsp;
                 </span>
                 <br>
                 <span class="text-muted">
-                  [Total Craft/Unlock & Deposit HP = {{ headgear.craft.stats.hp }}]
+                  [ Total Craft/Unlock & Deposit HP:
+                  <strong>{{ headgear.craft.stats.hp }}</strong>
+                  ]
                 </span>
               </p>
               <div class="text-right">
@@ -253,7 +280,6 @@
                   v-for="(material, index) in headgear.materials.normal"
                   :key="headgear.id + material.name + index"
                   class="card-text">
-                  <!-- {{ material.price.toLocaleString() }}z -->
                   {{ material.quantity }} x <span class="text-primary">{{ material.name }}</span>
                   = {{ material.total.toLocaleString() }}z
                   <sup
@@ -496,6 +522,9 @@ p {
   font-size: 1rem;
   padding-inline-start: 1rem;
   margin-block-end: 0.5rem;
+}
+.card-body ul.main-effect li {
+  white-space: pre-line;
 }
 .card-body ul.bp-list {
   padding-inline-start: 0.5rem;

@@ -25,7 +25,7 @@ export default {
       },
       colors: ['—', 'White', 'Green', 'Blue', 'Purple'],
       types: ['—', 'Weapon', 'Off-hand', 'Headwear', 'Armor', 'Garment', 'Footgear', 'Accessory'],
-      tags: ['—', 'Haute Couture', 'Element', 'Race', 'Size', 'Skill', 'Status Effect', 'Event', 'Cannot Decompose'],
+      tags: ['—', 'Craft', 'Element', 'Race', 'Size', 'Skill', 'Status Effect', 'Event', 'Cannot Decompose'],
       sorting: [
         { name: '—', value: 'default' },
         { name: 'Name (A-Z)', value: 'name-az' },
@@ -180,7 +180,7 @@ export default {
         }
 
         let filterTag = true;
-        if (tag === 'Haute Couture') {
+        if (tag === 'Craft') {
           filterTag = !!card.materials.length;
         } else if (tag === 'Event') {
           filterTag = !!card.event;

@@ -235,7 +235,7 @@
               v-if="card.materials.length"
               variant="success"
               href="#"
-              @click="clickTag('tag', 'Haute Couture')">Haute Couture</b-badge>
+              @click="clickTag('tag', 'Craft')">Craft</b-badge>
             <template v-for="(tag, index) of card.tags">
               <b-badge
                 :key="tag + index"
