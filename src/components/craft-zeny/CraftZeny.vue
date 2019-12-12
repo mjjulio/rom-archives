@@ -15,7 +15,7 @@
       <div class="col-md-3 col-sm-3 col-6">
         <label class="mb-1">Name</label>
         <input
-          v-model.lazy="filters.name"
+          v-model="filters.name"
           :class="{ 'bg-warning' : filters.name }"
           class="form-control form-control-sm">
       </div>
@@ -300,6 +300,13 @@
                 <p>Crafting Fee = {{ headgear.craft.fee.toLocaleString() }}z</p>
               </div>
             </b-collapse>
+            <div v-if="headgear.notes">
+              <hr>
+              <p class="card-text">
+                <span class="text-info">Notes:</span>
+                &nbsp;{{ headgear.notes }}
+              </p>
+            </div>
           </div>
           <div class="card-footer">
             <b-badge
@@ -535,6 +542,9 @@ p {
   background-color: ivory;
   padding: 10px;
   border-radius: 5px;
+}
+.card-body sup {
+  cursor: default;
 }
 .card-header {
   padding: 0.75rem 1rem;

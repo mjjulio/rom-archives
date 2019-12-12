@@ -14,14 +14,15 @@
           <b-nav-item :to="'/'">Home</b-nav-item>
           <!-- <b-nav-item v-bind:to="'/headgear'">Headgear List</b-nav-item>
           <b-nav-item v-bind:to="'/crafting'">HG Crafting</b-nav-item> -->
-          <b-nav-item-dropdown
+          <!-- <b-nav-item-dropdown
             id="headgear-dropdown"
             text="Heagears"
             right>
             <b-dropdown-item :to="'/headgear-list'">List</b-dropdown-item>
             <b-dropdown-item :to="'/headgear-craft'">Crafting</b-dropdown-item>
-          </b-nav-item-dropdown>
-          <b-nav-item :to="'/card-list'">Cards</b-nav-item>
+          </b-nav-item-dropdown> -->
+          <b-nav-item :to="'/headgears/list'">Headgears</b-nav-item>
+          <b-nav-item :to="'/cards/list'">Cards</b-nav-item>
           <b-nav-item :to="'/recipe-list'">Recipe</b-nav-item>
           <b-nav-item :to="'/enchant'">Enchantment</b-nav-item>
         </b-navbar-nav>

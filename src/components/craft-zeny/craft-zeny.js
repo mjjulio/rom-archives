@@ -52,7 +52,8 @@ export default {
         'Clock',
         'Snowman',
         'Floating Coin',
-        'Ancient Mithril Coin'
+        'Ancient Mithril Coin',
+
       ],
       additionalMats: [
         'apple_juice',
@@ -177,7 +178,7 @@ export default {
               const value = Number(headgear.blueprintCost);
               grandTotal += value;
               _blueprint.cost = `${value.toLocaleString()}z`;
-            } else {
+            } else if (headgear.blueprintCost !== 'N/A') {
               specialTotal.push(headgear.blueprintCost);
             }
 
@@ -244,6 +245,7 @@ export default {
             order: headgear.defaultSort,
             category: headgear.class,
             tags: headgear.tags ? headgear.tags.split(';').concat(_tags) : _tags,
+            notes: headgear.notes,
           });
         });
         data.headgears.sort((a, b) => a.order - b.order);
@@ -256,6 +258,12 @@ export default {
       const headgears = this.headgears.filter((headgear) => {
         const name = headgear.name.toUpperCase();
 
+        let filterTag = true;
+        if (filters.tag === 'Craft') {
+          filterTag = !!headgear.blueprint;
+        } else {
+          filterTag = headgear.tags.indexOf(filters.tag) !== -1;
+        }
         return (
           (filters.name === '' || name.indexOf(filters.name.toUpperCase()) !== -1)
           && (filters.mainEffect === '' || this.filterEffect(headgear, 'main'))
@@ -263,7 +271,7 @@ export default {
           && (filters.depositEffect === '' || this.filterEffect(headgear, 'deposit'))
           && (filters.type === '—' || filters.type === headgear.type)
           && (filters.category === '—' || filters.category === headgear.category)
-          && (filters.tag === '—' || headgear.tags.indexOf(filters.tag) !== -1)
+          && (filters.tag === '—' || filterTag)
         );
       });
 

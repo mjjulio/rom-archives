@@ -19,16 +19,16 @@ export default new Router({
       component: Home,
     },
     {
-      path: '/headgear-craft',
+      path: '/headgears/list',
       alias: '/crafting',
       name: 'CraftZeny',
       component: CraftZeny,
     },
-    {
-      path: '/headgear-list',
-      name: 'Headgear',
-      component: Headgear,
-    },
+    // {
+    //   path: '/headgears/list',
+    //   name: 'Headgear',
+    //   component: Headgear,
+    // },
     {
       path: '/vue',
       name: 'HelloWorld',
@@ -45,7 +45,7 @@ export default new Router({
       component: Enchant,
     },
     {
-      path: '/card-list',
+      path: '/cards/list',
       name: 'CardList',
       component: CardList,
     },
