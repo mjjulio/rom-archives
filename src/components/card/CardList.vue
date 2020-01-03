@@ -176,7 +176,9 @@
         <div
           :data-card-color="card.rarity.toLowerCase()"
           class="card mb-3">
-          <div class="card-header">{{ card.name }}</div>
+          <div class="card-header">
+            <span>{{ card.name }}</span><br><sup class="title text-indianred">{{ card.type }}</sup>
+          </div>
           <div class="card-body">
             <ul class="card-text main-effect">
               <li
@@ -184,28 +186,28 @@
                 :key="index">{{ effect }}</li>
             </ul>
             <p class="card-text">
-              <span class="text-info">Deposit:</span>&nbsp;&nbsp;{{ card.depositEffect }}
+              <span class="title text-info">Deposit:</span>&nbsp;&nbsp;{{ card.depositEffect }}
             </p>
             <p class="card-text">
-              <span class="text-info">Unlock:</span>&nbsp;&nbsp;{{ card.unlockEffect }}
+              <span class="title text-info">Unlock:</span>&nbsp;&nbsp;{{ card.unlockEffect }}
             </p>
             <!-- <p class="card-text">
               <span class="text-info">Type:</span>&nbsp;&nbsp;{{ card.type }}
             </p> -->
             <hr>
             <p class="card-text">
-              <span class="text-info">Exchange Price:</span>&nbsp;&nbsp;{{ card.displayPrice }}
+              <span class="title text-success">Exchange:</span>&nbsp;&nbsp;{{ card.displayPrice }}
             </p>
             <p
               v-if="card.materials.length"
               class="card-text clearfix">
               <span v-if="!card.event">
-                <span class="text-info">Crafted Price:</span>&nbsp;&nbsp;{{ card.craftedPrice }}
+                <span class="title text-primary">Card Craft:</span>&nbsp;&nbsp;{{ card.craftedPrice }}
               </span>
               <b-button
                 v-b-toggle="`collapse-${index}`"
-                class="btn-sm material-btn"
-                variant="outline-primary">MATERIALS</b-button>
+                class="btn-sm float-right title"
+                variant="outline-primary">Materials</b-button>
             </p>
             <!-- <hr>
             <p>
@@ -226,7 +228,7 @@
               <p class="card-text">Crafting Fee = {{ card.craftFee.toLocaleString() }}z</p>
             </b-collapse>
           </div>
-          <div class="card-footer">
+          <!-- <div class="card-footer">
             <b-badge
               variant="info"
               href="#"
@@ -254,7 +256,7 @@
               variant="warning"
               href="#"
               @click="clickTag('tag', 'Event')">Event</b-badge>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -285,6 +287,16 @@ p {
 .text-purple {
   color: darkorchid;
 }
+.text-indianred {
+  color: indianred;
+}
+.card .title {
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
+}
 .card-body, .card-header {
   font-family: 'Andika', Helvetica, Arial, sans-serif;
 }
@@ -294,7 +306,7 @@ p {
   margin-block-end: 0.5rem;
 }
 .card-header {
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem 0.25rem;
   font-weight: bold;
 }
 .card-body {
@@ -306,11 +318,6 @@ p {
 .card-footer {
   padding: 0.5rem 1rem 0.75rem;
 }
-.material-btn {
-  font-size: 0.625rem;
-  letter-spacing: 0.05rem;
-  float: right;
-}
 /* .card[data-card-color='gray'] {
   border-color: lightgray;
 } */
@@ -321,19 +328,19 @@ p {
   border-color: deepskyblue;
 } */
 .card[data-card-color='blue'] > .card-header {
-  background: linear-gradient(45deg, deepskyblue, lightgray);
+  background: linear-gradient(45deg, white, deepskyblue);
 }
 /* .card[data-card-color='green'] {
   border-color: lightgreen;
 } */
 .card[data-card-color='green'] > .card-header {
-  background: linear-gradient(45deg, lightgreen, lightgray) ;
+  background: linear-gradient(45deg, white, lightgreen) ;
 }
 /* .card[data-card-color='purple'] {
   border-color: plum;
 } */
 .card[data-card-color='purple'] > .card-header {
-  background: linear-gradient(45deg, orchid, lightgray) ;
+  background: linear-gradient(45deg, white, orchid) ;
 }
 .card-footer .badge[data-card-tag='element'] {
   background: peru;

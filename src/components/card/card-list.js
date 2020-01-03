@@ -176,7 +176,7 @@ export default {
         const cue = card.unlockEffect.toLowerCase();
         let filterUnlockEffect = cue.indexOf(unlockEffect) !== -1;
         if (unlockEffect === 'atk' && filterUnlockEffect) {
-          filterUnlockEffect = (cue.indexOf('m.atk') + 2) !== cde.indexOf('atk');
+          filterUnlockEffect = (cue.indexOf('m.atk') + 2) !== cue.indexOf('atk');
         }
 
         let filterTag = true;

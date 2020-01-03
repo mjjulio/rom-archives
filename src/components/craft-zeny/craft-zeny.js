@@ -10,6 +10,7 @@ export default {
         { name: 'leaf of yggdrasil', price: 2000, volume: 1 },
         { name: 'under the tower', price: 10000, volume: 1 },
         { name: 'hot meal', price: 25000, volume: 1 },
+        { name: 'blue gemstone', price: 500, volume: 1 },
       ],
       headgears: [],
       noData: [],
@@ -53,7 +54,7 @@ export default {
         'Snowman',
         'Floating Coin',
         'Ancient Mithril Coin',
-
+        'A Bag of Zeny',
       ],
       additionalMats: [
         'apple_juice',

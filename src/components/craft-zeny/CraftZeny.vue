@@ -123,7 +123,14 @@
         :key="index"
         class="col-12 col-sm-12 col-md-6 col-lg-4 mb-3">
         <div class="card">
-          <div class="card-header">{{ headgear.name }}</div>
+          <div class="card-header">
+            {{ headgear.name }}<br>
+            <sup class="title">
+              <span class="text-indianred">{{ headgear.type }}</span>
+              &#8231;
+              <span class="text-darkorange">{{ headgear.category }}</span>
+            </sup>
+          </div>
           <div class="card-body">
             <p class="card-text">
               <ul class="card-text main-effect">
@@ -133,34 +140,38 @@
               </ul>
             </p>
             <p class="card-text">
-              <span class="text-info">Deposit:</span>
+              <span class="title text-info">Deposit:</span>
               &nbsp;{{ headgear.effect.deposit }}
             </p>
             <p class="card-text">
-              <span class="text-info">Craft / Unlock:</span>
+              <span class="title text-info">Craft / Unlock:</span>
               &nbsp;{{ headgear.effect.unlock }}
             </p>
             <hr>
-            <p class="card-text">
-              <span class="text-info">Source:</span>
+            <p
+              v-if="headgear.item.source !== 'None'"
+              class="card-text">
+              <span class="title text-indianred">Source:</span>
               <span :class="{ 'text-muted' : headgear.item.source === 'None' }">
                 &nbsp;{{ headgear.item.source }}
               </span>
             </p>
-            <p class="card-text">
-              <span class="text-info">NPC Price:</span>
+            <p
+              v-if="headgear.item.price !== 'N/A'"
+              class="card-text">
+              <span class="title text-purple">NPC Price:</span>
               <span :class="{ 'text-muted' : headgear.item.price === 'N/A' }">
                 &nbsp;{{ headgear.item.price }}
               </span>
             </p>
             <p class="card-text">
-              <span class="text-info">Exchange Price:</span>
+              <span class="title text-success">Exchange:</span>
               &nbsp;
               <span v-if="!headgear.item.tradeable">
                 <em class="text-muted">non-tradeable</em>
               </span>
               <span v-else-if="!headgear.item.exchange">
-                <span class="text-warning">NO DATA</span>
+                <em class="text-warning">no data</em>
               </span>
               <span v-else>
                 {{ headgear.item.exchange.toLocaleString() }}z
@@ -168,10 +179,24 @@
             </p>
             <div v-if="headgear.craft">
               <p>
-                <span class="text-info">Crafted Price:</span>
-                <strong>&nbsp;{{ headgear.craft.price.toLocaleString() }}z</strong>
-                <em v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</em>
-                <span v-if="!headgear.blueprint.exchange && headgear.blueprint.tradeable">
+                <span class="title text-primary">Gear Craft: </span>
+                <!-- <span>&nbsp;{{ headgear.craft.price.toLocaleString() }}z</span> -->
+                <span
+                  v-if="(!headgear.blueprint.exchange && headgear.blueprint.tradeable)
+                  || headgear.materials.missing || !headgear.craft.fee">
+                  <span>
+                    &nbsp;{{ headgear.craft.price.toLocaleString() }}z
+                    <small v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</small>
+                  </span>
+                  <sup
+                    class="text-danger"
+                    title="missing some item prices">[!]</sup>
+                </span>
+                <span v-else>
+                  &nbsp;{{ headgear.craft.price.toLocaleString() }}z
+                  <small v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</small>
+                </span>
+                <!-- <span v-if="!headgear.blueprint.exchange && headgear.blueprint.tradeable">
                   <br><i class="text-danger">*lacking blueprint price</i>
                 </span>
                 <span v-if="headgear.materials.missing">
@@ -179,16 +204,16 @@
                 </span>
                 <span v-if="!headgear.craft.fee">
                   <br><i class="text-danger">*lacking craft fee</i>
-                </span>
+                </span> -->
               </p>
               <p v-if="headgear.blueprint.cost && headgear.blueprint.tradeable">
-                <span class="text-info">
-                  Crafted Price
-                  <sup title="using NPC blueprint">[2nd]</sup>:
+                <span class="title text-primary">
+                  Gear Craft
+                  <sup title="using NPC blueprint">[2]</sup>:
                 </span>
                 &nbsp;{{ (headgear.craft.price - headgear.blueprint.exchange).toLocaleString() }}z
-                + {{ headgear.blueprint.cost }}
-                <em v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</em>
+                <small>+ {{ headgear.blueprint.cost }}</small>
+                <small v-if="headgear.craft.extra">+ {{ headgear.craft.extra }}</small>
               </p>
               <p v-if="filters.sort.indexOf('patkz') > -1">
                 <span class="text-info">Craft Cost per ATK:</span>
@@ -230,8 +255,8 @@
               <div class="text-right">
                 <b-button
                   v-b-toggle="`collapse-${headgear.id}`"
-                  class="btn-sm material-btn"
-                  variant="outline-primary">MATERIALS</b-button>
+                  class="btn-sm title"
+                  variant="outline-primary">Materials</b-button>
               </div>
             </div>
             <b-collapse
@@ -243,11 +268,15 @@
                   <div>1 x <span class="text-primary">Blueprint</span></div>
                   <ul class="bp-list">
                     <li>
-                      <span class="text-info">Source:</span>
+                      <span class="title text-info">Source:</span>
                       &nbsp;{{ headgear.blueprint.source }}
                     </li>
+                    <li v-if="headgear.blueprint.cost">
+                      <span class="title text-indianred">NPC Price:</span>
+                      {{ headgear.blueprint.cost }}
+                    </li>
                     <li v-if="headgear.blueprint.tradeable">
-                      <span class="text-info">Exchange Price:</span>
+                      <span class="title text-success">Exchange:</span>
                       &nbsp;
                       <span
                         v-if="!headgear.blueprint.exchange"
@@ -267,12 +296,8 @@
                       </span>
                     </li>
                     <li v-else>
-                      <span class="text-info">Exchange Price:</span>
+                      <span class="title text-success">Exchange:</span>
                       &nbsp;<em class="text-muted">non-tradeable</em>
-                    </li>
-                    <li v-if="headgear.blueprint.cost">
-                      <span class="text-info">NPC Price:</span>
-                      {{ headgear.blueprint.cost }}
                     </li>
                   </ul>
                 </div>
@@ -303,12 +328,12 @@
             <div v-if="headgear.notes">
               <hr>
               <p class="card-text">
-                <span class="text-info">Notes:</span>
+                <span class="title text-indianred">Notes:</span>
                 &nbsp;{{ headgear.notes }}
               </p>
             </div>
           </div>
-          <div class="card-footer">
+          <!-- <div class="card-footer">
             <b-badge
               variant="info"
               href="#"
@@ -322,7 +347,7 @@
               variant="success"
               href="#"
               @click="clickTag('tag', 'Craft')">Craft</b-badge>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -522,11 +547,23 @@ p {
 .text-purple {
   color: darkorchid;
 }
+.text-indianred {
+  color: indianred;
+}
+.text-darkorange {
+  color: darkorange;
+}
+.card .title {
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
+}
 .card-body, .card-header {
   font-family: 'Andika', Helvetica, Arial, sans-serif;
 }
 .card-body ul.main-effect {
-  font-size: 1rem;
   padding-inline-start: 1rem;
   margin-block-end: 0.5rem;
 }
@@ -547,7 +584,7 @@ p {
   cursor: default;
 }
 .card-header {
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem 0.25rem;
   font-weight: bold;
 }
 .card-body {
