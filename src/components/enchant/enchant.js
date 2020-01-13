@@ -15,8 +15,9 @@ export default {
         mouth: [],
         tail: [],
         back: [],
+        offhand: [],
       },
-      types: ['Weapon', 'Armor', 'Garment', 'Shoes', 'Accessory', 'Head', 'Face', 'Mouth', 'Tail', 'Back'],
+      types: ['Weapon', 'Armor', 'Garment', 'Shoes', 'Accessory', 'Head', 'Face', 'Mouth', 'Tail', 'Back', 'Offhand'],
       filters: {
         equipment: 'Weapon',
       },

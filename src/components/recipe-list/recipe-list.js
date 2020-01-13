@@ -28,10 +28,10 @@ export default {
       .then((response) => {
         data.foods = response.data.map((food) => {
           if (food.materials) {
-            food.materials = '\u2022 '.concat(food.materials.replace(/,/g, '\n\u2022 '));
+            food.ingredients = food.materials.split(', ');
           }
           if (food.nutrionalValue) {
-            food.nutrionalValue = '\u2022 '.concat(food.nutrionalValue.replace(/,/g, '\n\u2022 '));
+            food.effects = food.nutrionalValue.split(', ');
           }
           return food;
         });

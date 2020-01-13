@@ -10,17 +10,18 @@
         <thead>
           <tr
             class="text-center">
-            <th width="20%">4th Enchantment</th>
-            <th width="8%">Weapon</th>
-            <th width="8">Armor</th>
-            <th width="8%">Garment</th>
-            <th width="8%">Shoes</th>
-            <th width="8%">Accessory</th>
-            <th width="8%">Head</th>
-            <th width="8%">Face</th>
-            <th width="8%">Mouth</th>
-            <th width="8%">Back</th>
-            <th width="8%">Tail</th>
+            <th width="23%">4th Enchantment</th>
+            <th width="7%">Weapon</th>
+            <th width="7">Armor</th>
+            <th width="7%">Garment</th>
+            <th width="7%">Shoes</th>
+            <th width="7%">Accessory</th>
+            <th width="7%">Head</th>
+            <th width="7%">Face</th>
+            <th width="7%">Mouth</th>
+            <th width="7%">Back</th>
+            <th width="7%">Tail</th>
+            <th width="7%">Off-Hand</th>
           </tr>
         </thead>
         <tbody>
@@ -36,6 +37,7 @@
             :key="index">
             <td>
               <span class="font-weight-bold">{{ enchant.name }}</span>
+              <br>
               <span class="small">{{ enchant.subName }}</span>
             </td>
             <td class="enc-matrix"><i :class="[ enchant.weapon ? checkClass : timesClass]" /></td>
@@ -48,6 +50,7 @@
             <td class="enc-matrix"><i :class="[ enchant.mouth ? checkClass : timesClass]" /></td>
             <td class="enc-matrix"><i :class="[ enchant.back ? checkClass : timesClass]" /></td>
             <td class="enc-matrix"><i :class="[ enchant.tail ? checkClass : timesClass]" /></td>
+            <td class="enc-matrix"><i :class="[ enchant.offhand ? checkClass : timesClass]" /></td>
           </tr>
         </tbody>
       </table>

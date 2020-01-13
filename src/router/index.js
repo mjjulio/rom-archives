@@ -35,7 +35,7 @@ export default new Router({
       component: HelloWorld,
     },
     {
-      path: '/recipe-list',
+      path: '/cooking',
       name: 'RecipeList',
       component: RecipeList,
     },

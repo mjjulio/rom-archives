@@ -2,12 +2,12 @@
   <div
     id="recipe-list"
     class="container">
-		<h3 class="pt-5">Recipe - List</h3>
+    <h3 class="pt-5">Recipe - List</h3>
     <hr>
     <div
-      class="form-group row"
-      style="width: 75%; margin: 0 auto 1rem;">
-      <div class="col-md-3 col-sm-3 col-xs-6">
+      class="form-group row">
+      <!-- style="width: 75%; margin: 0 auto 1rem;"> -->
+      <div class="col-md-2 col-sm-2 col-xs-6">
         <label for="usr">Name</label>
         <input
           v-model="filters.name"
@@ -15,7 +15,7 @@
           type="text"
           class="form-control">
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
+      <div class="col-md-2 col-sm-2 col-xs-6">
         <label>Station</label>
         <select
           v-model="filters.station"
@@ -29,7 +29,7 @@
           </option>
         </select>
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
+      <div class="col-md-2 col-sm-2 col-xs-6">
         <label>Star</label>
         <select
           v-model="filters.star"
@@ -43,39 +43,39 @@
           </option>
         </select>
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
+      <!-- <div class="col-md-3 col-sm-3 col-xs-6">
         <label for="usr">Ingredients</label>
         <input
           v-model="filters.materials"
           :class="{ 'active-filter' : filters.materials }"
           type="text"
           class="form-control">
-      </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
-        <label for="usr">Nutrional Value</label>
+      </div> -->
+      <div class="col-md-2 col-sm-2 col-xs-6">
+        <label for="usr">Effect</label>
         <input
           v-model="filters.nutrionalValue"
           :class="{ 'active-filter' : filters.nutrionalValue }"
           type="text"
           class="form-control">
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
-        <label for="usr">Cook Lvl10</label>
+      <div class="col-md-2 col-sm-2 col-xs-6">
+        <label for="usr">Cook Lv10</label>
         <input
           v-model="filters.cookLvl10"
           :class="{ 'active-filter' : filters.cookLvl10 }"
           type="text"
           class="form-control">
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
-        <label for="usr">Taste Lvl10</label>
+      <div class="col-md-2 col-sm-2 col-xs-6">
+        <label for="usr">Taste Lv10</label>
         <input
           v-model="filters.tasteLvl10"
           :class="{ 'active-filter' : filters.tasteLvl10 }"
           type="text"
           class="form-control">
       </div>
-      <div class="col-md-3 col-sm-3 col-xs-6">
+      <!-- <div class="col-md-3 col-sm-3 col-xs-6">
         <label>&nbsp;</label>
         <button
           type="button"
@@ -83,53 +83,64 @@
           @click="resetFilters()">
           Reset
         </button>
-      </div>
+      </div> -->
     </div>
-    <div>
-      <table class="table table-striped table-bordered ">
-        <tr class="info">
-          <th style="width: 160px">Name</th>
-          <th style="width: 140px">Station</th>
-          <th style="width: 70px">Star</th>
-          <th style="width: 185px">Ingredients</th>
-          <th style="width: 290px">Nutrional Value</th>
-          <th style="width: 120px">Cook Lvl10</th>
-          <th style="width: 120px">Taste Lvl10</th>
-        </tr>
-        <tr v-if="loading">
-          <td
-            class="text-center"
-            colspan="7">
-            <div class="loading"><img src="@/assets/loading.gif"></div>
-          </td>
-        </tr>
-        <tr v-if="!loading && !filteredFood.length">
-          <td
-            class="text-center"
-            colspan="7">No results found</td>
-        </tr>
-        <tr
-          v-for="(food, index) in filteredFood"
-          :key="index">
-          <td>
-            <strong>{{ food.name }}</strong>
-          </td>
-          <td>{{ food.station }}</td>
-          <td class="text-center">{{ food.star }}</td>
-          <td>{{ food.materials }}</td>
-          <td>
-            <p>{{ food.nutrionalValue }}</p>
-            <p>
-              <i>
-                <span class="text-info">Duration:</span> {{ food.duration }}
-                <span class="text-info">Discharge:</span> {{ food.discharge }}
-              </i>
+    <div class="row">
+      <div
+        v-for="(food, index) in filteredFood"
+        :key="index"
+        class="col-12 col-sm-12 col-md-6 col-lg-4 mb-3">
+        <div class="card">
+          <div class="card-header">
+            {{ food.name }}<br>
+            <sup class="title">
+              <strong class="text-darkorange">{{ food.star }}</strong>
+              &#8231;
+              <span class="text-muted">{{ food.station }}</span>
+            </sup>
+          </div>
+          <div class="card-body">
+            <p class="card-text">
+              <ul class="card-text list">
+                <li
+                  v-for="(effect, index) of food.effects"
+                  :key="index">{{ effect }}</li>
+              </ul>
             </p>
-          </td>
-          <td>{{ food.cookLvl10 }}</td>
-          <td>{{ food.tasteLvl10 }}</td>
-        </tr>
-      </table>
+            <div class="clearfix">
+              <div class="float-left w-50">
+                <p>
+                  <span class="title text-primary">Ingredients:</span>
+                  <br>
+                  <ul class="card-text list">
+                    <li
+                      v-for="(ingredient, index) of food.ingredients"
+                      :key="index">{{ ingredient }}</li>
+                  </ul>
+                </p>
+              </div>
+              <div class="float-left w-50">
+                <p>
+                  <span class="title text-primary">Duration:</span>
+                  <br>{{ food.duration }}
+                </p>
+                <p>
+                  <span class="title text-primary">Discharge:</span>
+                  <br>{{ food.discharge }}
+                </p>
+              </div>
+            </div>
+            <p class="card-text">
+              <span class="title text-info">Cook Lv10:</span>
+              &nbsp;{{ food.cookLvl10 }}
+            </p>
+            <p class="card-text">
+              <span class="title text-info">Taste Lv10:</span>
+              &nbsp;{{ food.tasteLvl10 }}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -160,4 +171,38 @@
     font-weight: 700;
     margin-bottom: 0.25rem;
   }
+.text-purple {
+  color: darkorchid;
+}
+.text-indianred {
+  color: indianred;
+}
+.text-darkorange {
+  color: darkorange;
+}
+.card .title {
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
+}
+.card-body, .card-header {
+  font-family: 'Andika', Helvetica, Arial, sans-serif;
+}
+.card-body ul.list {
+  padding-inline-start: 1rem;
+  margin-block-end: 0.5rem;
+}
+.card-header {
+  padding: 0.5rem 1rem 0.25rem;
+  font-weight: bold;
+}
+.card-body {
+  color: #4d4d4d;
+  padding: 1rem;
+  font-size: 0.875rem;
+  /* white-space: pre-line; */
+  /* word-break: break-word; */
+}
 </style>

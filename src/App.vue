@@ -23,7 +23,7 @@
           </b-nav-item-dropdown> -->
           <b-nav-item :to="'/headgears/list'">Headgears</b-nav-item>
           <b-nav-item :to="'/cards/list'">Cards</b-nav-item>
-          <b-nav-item :to="'/recipe-list'">Recipe</b-nav-item>
+          <b-nav-item :to="'/cooking'">Cooking</b-nav-item>
           <b-nav-item :to="'/enchant'">Enchantment</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
