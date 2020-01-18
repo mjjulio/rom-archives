@@ -2,7 +2,7 @@
   <div
     id="recipe-list"
     class="container">
-    <h3 class="pt-5">Recipe - List</h3>
+    <h3 class="pt-5">Cooking Recipe - List</h3>
     <hr>
     <div
       class="form-group row">
@@ -14,34 +14,6 @@
           :class="{ 'active-filter' : filters.name }"
           type="text"
           class="form-control">
-      </div>
-      <div class="col-md-2 col-sm-2 col-xs-6">
-        <label>Station</label>
-        <select
-          v-model="filters.station"
-          :class="{ 'active-filter' : filters.station !== 'All' }"
-          class="form-control">
-          <option
-            v-for="(station, index) of stations"
-            :value="station"
-            :key="index">
-            {{ station }}
-          </option>
-        </select>
-      </div>
-      <div class="col-md-2 col-sm-2 col-xs-6">
-        <label>Star</label>
-        <select
-          v-model="filters.star"
-          :class="{ 'active-filter' : filters.star !== 'All' }"
-          class="form-control">
-          <option
-            v-for="(star, index) of stars"
-            :value="star"
-            :key="index">
-            {{ star }}
-          </option>
-        </select>
       </div>
       <!-- <div class="col-md-3 col-sm-3 col-xs-6">
         <label for="usr">Ingredients</label>
@@ -59,22 +31,78 @@
           type="text"
           class="form-control">
       </div>
-      <div class="col-md-2 col-sm-2 col-xs-6">
+      <!-- <div class="col-md-2 col-sm-2 col-xs-6">
         <label for="usr">Cook Lv10</label>
         <input
           v-model="filters.cookLvl10"
           :class="{ 'active-filter' : filters.cookLvl10 }"
           type="text"
           class="form-control">
+      </div> -->
+      <div class="col-md-2 col-sm-2 col-xs-6">
+        <label>Cook Lv10</label>
+        <select
+          v-model="filters.cookLvl10"
+          :class="{ 'active-filter' : filters.cookLvl10 !== '—' }"
+          class="form-control">
+          <option
+            v-for="(stat, index) of stats"
+            :value="stat"
+            :key="index">
+            {{ stat }}
+          </option>
+        </select>
       </div>
       <div class="col-md-2 col-sm-2 col-xs-6">
+        <label>Taste Lv10</label>
+        <select
+          v-model="filters.tasteLvl10"
+          :class="{ 'active-filter' : filters.tasteLvl10 !== '—' }"
+          class="form-control">
+          <option
+            v-for="(stat, index) of stats"
+            :value="stat"
+            :key="index">
+            {{ stat }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-2 col-sm-2 col-xs-6">
+        <label>Star</label>
+        <select
+          v-model="filters.star"
+          :class="{ 'active-filter' : filters.star !== '—' }"
+          class="form-control">
+          <option
+            v-for="(star, index) of stars"
+            :value="star"
+            :key="index">
+            {{ star }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-2 col-sm-2 col-xs-6">
+        <label>Station</label>
+        <select
+          v-model="filters.station"
+          :class="{ 'active-filter' : filters.station !== '—' }"
+          class="form-control">
+          <option
+            v-for="(station, index) of stations"
+            :value="station"
+            :key="index">
+            {{ station }}
+          </option>
+        </select>
+      </div>
+      <!-- <div class="col-md-2 col-sm-2 col-xs-6">
         <label for="usr">Taste Lv10</label>
         <input
           v-model="filters.tasteLvl10"
           :class="{ 'active-filter' : filters.tasteLvl10 }"
           type="text"
           class="form-control">
-      </div>
+      </div> -->
       <!-- <div class="col-md-3 col-sm-3 col-xs-6">
         <label>&nbsp;</label>
         <button
@@ -131,12 +159,20 @@
               </div>
             </div>
             <p class="card-text">
-              <span class="title text-info">Cook Lv10:</span>
-              &nbsp;{{ food.cookLvl10 }}
+              <b-form-checkbox
+                v-model="storage.cook"
+                :value="food.id">
+                <span class="title text-info">Cook Lv10:</span>
+                &nbsp;{{ food.cookLvl10 }}
+              </b-form-checkbox>
             </p>
             <p class="card-text">
-              <span class="title text-info">Taste Lv10:</span>
-              &nbsp;{{ food.tasteLvl10 }}
+              <b-form-checkbox
+                v-model="storage.taste"
+                :value="food.id">
+                <span class="title text-info">Taste Lv10:</span>
+                &nbsp;{{ food.tasteLvl10 }}
+              </b-form-checkbox>
             </p>
           </div>
         </div>
@@ -204,5 +240,8 @@
   font-size: 0.875rem;
   /* white-space: pre-line; */
   /* word-break: break-word; */
+}
+#recipe-list >>> .custom-control-input:checked ~ .custom-control-label::before {
+  color: #17a2b8 !important;
 }
 </style>

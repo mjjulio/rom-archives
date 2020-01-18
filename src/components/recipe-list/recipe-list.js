@@ -5,19 +5,24 @@ export default {
   data() {
     return {
       foods: [],
+      storage: {
+        cook: [],
+        taste: [],
+      },
       filters: {
         name: '',
-        station: 'All',
-        star: 'All',
+        station: '—',
+        star: '—',
         materials: '',
         nutrionalValue: '',
         duration: '',
         discharge: '',
-        cookLvl10: '',
-        tasteLvl10: '',
+        cookLvl10: '—',
+        tasteLvl10: '—',
       },
-      stars: ['All', '✩', '★', '★✩', '★★', '★★✩', '★★★', '★★★✩', '★★★★', '★★★★✩', '★★★★★'],
-      stations: ['All', 'Luxury Food Station', 'Adventurous BBQ', 'Pressure Cooker', 'Beverage Stall'],
+      stars: ['—', '✩', '★', '★✩', '★★', '★★✩', '★★★', '★★★✩', '★★★★', '★★★★✩', '★★★★★'],
+      stations: ['—', 'Luxury Food Station', 'Adventurous BBQ', 'Pressure Cooker', 'Beverage Stall'],
+      stats: ['—', 'Atk', 'M.Atk', 'Def', 'M.Def', 'Max HP', 'Max SP'],
       showBackToTop: false,
       loading: true,
     };
@@ -33,10 +38,25 @@ export default {
           if (food.nutrionalValue) {
             food.effects = food.nutrionalValue.split(', ');
           }
+          food.cook = 0;
+          food.taste = 0;
           return food;
         });
         data.loading = false;
+
+        if (localStorage.getItem('cooking')) {
+          data.storage = JSON.parse(localStorage.getItem('cooking'));
+          data.storage.cook.forEach((item) => {
+            const i = data.foods.findIndex(food => food.id === item);
+            if (i >= 0) {
+              this.foods[i].cook = 1;
+            }
+          });
+        }
       });
+  },
+  beforeDestroy() {
+    localStorage.setItem('cooking', JSON.stringify(this.storage));
   },
   computed: {
     filteredFood: function filteredFood() {
@@ -52,21 +72,25 @@ export default {
           .indexOf(filters.cookLvl10.toUpperCase()) !== -1;
         if (filters.cookLvl10.toUpperCase() === 'ATK') {
           filterCookLvl = food.cookLvl10.toUpperCase().indexOf('.ATK') === -1 ? filterCookLvl : false;
+        } else if (filters.cookLvl10.toUpperCase() === 'DEF') {
+          filterCookLvl = food.cookLvl10.toUpperCase().indexOf('.DEF') === -1 ? filterCookLvl : false;
         }
 
         let filterTasteLvl = food.tasteLvl10.toUpperCase()
           .indexOf(filters.tasteLvl10.toUpperCase()) !== -1;
         if (filters.tasteLvl10.toUpperCase() === 'ATK') {
           filterTasteLvl = food.tasteLvl10.toUpperCase().indexOf('.ATK') === -1 ? filterTasteLvl : false;
+        } else if (filters.tasteLvl10.toUpperCase() === 'DEF') {
+          filterTasteLvl = food.tasteLvl10.toUpperCase().indexOf('.DEF') === -1 ? filterTasteLvl : false;
         }
 
         return (filters.name === '' || food.name.toUpperCase().indexOf(filters.name.toUpperCase()) !== -1)
-          && (filters.star === 'All' || food.star === filters.star)
-          && (filters.station === 'All' || food.station === filters.station)
+          && (filters.star === '—' || food.star === filters.star)
+          && (filters.station === '—' || food.station === filters.station)
           && (filters.materials === '' || food.materials.toUpperCase().indexOf(filters.materials.toUpperCase()) !== -1)
           && (filters.nutritionValue === '' || filterNutrition)
-          && (filters.cookLvl10 === '' || filterCookLvl)
-          && (filters.tasteLvl10 === '' || filterTasteLvl)
+          && (filters.cookLvl10 === '—' || filterCookLvl)
+          && (filters.tasteLvl10 === '—' || filterTasteLvl)
         ;
       });
       return foods;
@@ -76,7 +100,8 @@ export default {
     resetFilters: function resetFilters() {
       const data = this;
       Object.keys(data.filters).forEach((key) => {
-        data.filters[key] = key === 'star' || key === 'station' ? 'All' : '';
+        data.filters[key] = key === 'star' || key === 'station'
+          || key === 'cookLvl10' || key === 'tasteLvl10' ? '—' : '';
       });
     },
   },
