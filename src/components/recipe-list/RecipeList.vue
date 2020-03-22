@@ -124,7 +124,7 @@
             <sup class="title">
               <strong class="text-darkorange">{{ food.star }}</strong>
               &#8231;
-              <span class="text-muted">{{ food.station }}</span>
+              <span class="text-indianred">{{ food.station }}</span>
             </sup>
           </div>
           <div class="card-body">

@@ -233,6 +233,8 @@ export default {
               main: headgear.mainEffect.split(';'),
               unlock: headgear.craftEffect,
               deposit: headgear.depositEffect,
+              deposit6: headgear.deposit6,
+              deposit8: headgear.deposit8,
             },
             blueprint: _blueprint,
             materials: _materials,

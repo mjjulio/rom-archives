@@ -142,6 +142,14 @@
             <p class="card-text">
               <span class="title text-info">Deposit:</span>
               &nbsp;{{ headgear.effect.deposit }}
+              <span v-if="headgear.effect.deposit6">
+                <br>
+                <span class="title text-muted">Refine +6:</span>
+                &nbsp;{{ headgear.effect.deposit6 }}
+                <br>
+                <span class="title text-muted">Refine +8:</span>
+                &nbsp;{{ headgear.effect.deposit8 }}
+              </span>
             </p>
             <p class="card-text">
               <span class="title text-info">Craft / Unlock:</span>
@@ -265,7 +273,7 @@
                       &nbsp;{{ headgear.blueprint.source }}
                     </li>
                     <li v-if="headgear.blueprint.cost">
-                      <span class="title text-indianred">NPC Price:</span>
+                      <span class="title text-purple">NPC Price:</span>
                       {{ headgear.blueprint.cost }}
                     </li>
                     <li v-if="headgear.blueprint.tradeable">
